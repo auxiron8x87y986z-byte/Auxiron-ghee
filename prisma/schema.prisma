@@ -7,7 +7,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model adminuser {
+model AdminUser {
   id        Int      @id @default(autoincrement())
   email     String   @unique(map: "AdminUser_email_key")
   password  String
@@ -16,7 +16,7 @@ model adminuser {
   name      String   @default("Admin")
 }
 
-model blogpost {
+model BlogPost {
   id              Int      @id @default(autoincrement())
   title           String
   slug            String   @unique(map: "BlogPost_slug_key")
@@ -30,7 +30,7 @@ model blogpost {
   updatedAt       DateTime
 }
 
-model contentblock {
+model ContentBlock {
   id        Int      @id @default(autoincrement())
   key       String   @unique(map: "ContentBlock_key_key")
   value     String   @db.Text
@@ -39,7 +39,7 @@ model contentblock {
   updatedAt DateTime
 }
 
-model faq {
+model Faq {
   id        Int      @id @default(autoincrement())
   question  String   @db.Text
   answer    String   @db.Text
@@ -48,7 +48,7 @@ model faq {
   updatedAt DateTime
 }
 
-model order {
+model Order {
   id            Int         @id @default(autoincrement())
   customerName  String
   customerPhone String
@@ -64,26 +64,26 @@ model order {
   paymentStatus String      @default("PENDING")
   transactionId String?
   userId        Int?
-  user          user?       @relation(fields: [userId], references: [id], map: "Order_userId_fkey")
-  orderitem     orderitem[]
+  user          User?       @relation(fields: [userId], references: [id], map: "Order_userId_fkey")
+  orderitem     OrderItem[]
 
   @@index([userId], map: "Order_userId_fkey")
 }
 
-model orderitem {
+model OrderItem {
   id        Int     @id @default(autoincrement())
   orderId   Int
   productId Int
   quantity  Int
   price     Float
-  order     order   @relation(fields: [orderId], references: [id], map: "OrderItem_orderId_fkey")
-  product   product @relation(fields: [productId], references: [id], map: "OrderItem_productId_fkey")
+  order     Order   @relation(fields: [orderId], references: [id], map: "OrderItem_orderId_fkey")
+  product   Product @relation(fields: [productId], references: [id], map: "OrderItem_productId_fkey")
 
   @@index([orderId], map: "OrderItem_orderId_fkey")
   @@index([productId], map: "OrderItem_productId_fkey")
 }
 
-model paymentgateway {
+model PaymentGateway {
   id         Int      @id @default(autoincrement())
   name       String   @unique(map: "PaymentGateway_name_key")
   enabled    Boolean  @default(false)
@@ -95,7 +95,7 @@ model paymentgateway {
   updatedAt  DateTime
 }
 
-model product {
+model Product {
   id             Int         @id @default(autoincrement())
   name           String
   description    String      @db.Text
@@ -108,10 +108,10 @@ model product {
   healthBenefits String?     @db.Text
   howToUse       String?     @db.Text
   images         String?     @db.LongText
-  orderitem      orderitem[]
+  orderitem      OrderItem[]
 }
 
-model settings {
+model Settings {
   id             Int     @id @default(autoincrement())
   contactEmail   String
   whatsappNumber String
@@ -119,12 +119,13 @@ model settings {
   location       String?
 }
 
-model user {
+model User {
   id        Int      @id @default(autoincrement())
   name      String
   email     String   @unique(map: "User_email_key")
   password  String
   createdAt DateTime @default(now())
   updatedAt DateTime
-  order     order[]
+  order     Order[]
 }
+

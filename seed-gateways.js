@@ -4,10 +4,13 @@ const prisma = new PrismaClient();
 async function main() {
   const gateways = ['Razorpay', 'Stripe', 'Paytm'];
   for (const name of gateways) {
-    await prisma.paymentGateway.upsert({
+    await prisma.PaymentGateway.upsert({
       where: { name },
       update: {},
-      create: { name }
+      create: { 
+        name,
+        updatedAt: new Date()
+      }
     });
   }
   console.log('Seeded Payment Gateways');
