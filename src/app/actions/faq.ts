@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 
 export async function getFAQs() {
   try {
-    const faqs = await prisma.fAQ.findMany({
+    const faqs = await prisma.faq.findMany({
       orderBy: { order: "asc" },
     });
     return { success: true, faqs };
@@ -21,14 +21,15 @@ export async function createFAQ(data: { question: string; answer: string; order?
       return { success: false, error: "Question and answer are required" };
     }
 
-    const currentCount = await prisma.fAQ.count();
+    const currentCount = await prisma.faq.count();
     const order = data.order !== undefined ? data.order : currentCount + 1;
 
-    const faq = await prisma.fAQ.create({
+    const faq = await prisma.faq.create({
       data: {
         question: data.question,
         answer: data.answer,
         order,
+        updatedAt: new Date(),
       },
     });
 
@@ -47,12 +48,13 @@ export async function updateFAQ(id: number, data: { question: string; answer: st
       return { success: false, error: "Question and answer are required" };
     }
 
-    const faq = await prisma.fAQ.update({
+    const faq = await prisma.faq.update({
       where: { id },
       data: {
         question: data.question,
         answer: data.answer,
         order: data.order,
+        updatedAt: new Date(),
       },
     });
 
@@ -67,7 +69,7 @@ export async function updateFAQ(id: number, data: { question: string; answer: st
 
 export async function deleteFAQ(id: number) {
   try {
-    await prisma.fAQ.delete({
+    await prisma.faq.delete({
       where: { id },
     });
 
@@ -85,9 +87,9 @@ export async function reorderFAQs(orderedIds: number[]) {
     // We update each FAQ with its new order
     await prisma.$transaction(
       orderedIds.map((id, index) =>
-        prisma.fAQ.update({
+        prisma.faq.update({
           where: { id },
-          data: { order: index + 1 },
+          data: { order: index + 1, updatedAt: new Date() },
         })
       )
     );
