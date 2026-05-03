@@ -11,7 +11,7 @@ model AdminUser {
   email     String   @unique(map: "AdminUser_email_key")
   password  String
   createdAt DateTime @default(now())
-  updatedAt DateTime
+  updatedAt DateTime @updatedAt
   name      String   @default("Admin")
 }
 
@@ -26,7 +26,7 @@ model BlogPost {
   metaDescription String?  @db.Text
   published       Boolean  @default(false)
   createdAt       DateTime @default(now())
-  updatedAt       DateTime
+  updatedAt       DateTime @updatedAt
 }
 
 model ContentBlock {
@@ -35,7 +35,7 @@ model ContentBlock {
   value     String   @db.Text
   page      String
   createdAt DateTime @default(now())
-  updatedAt DateTime
+  updatedAt DateTime @updatedAt
 }
 
 model Faq {
@@ -44,7 +44,7 @@ model Faq {
   answer    String   @db.Text
   order     Int?
   createdAt DateTime @default(now())
-  updatedAt DateTime
+  updatedAt DateTime @updatedAt
 }
 
 model Order {
@@ -59,7 +59,7 @@ model Order {
   status        String      @default("Processing")
   items         String?     @db.LongText
   createdAt     DateTime    @default(now())
-  updatedAt     DateTime
+  updatedAt     DateTime @updatedAt
   paymentStatus String      @default("PENDING")
   transactionId String?
   userId        Int?
@@ -91,7 +91,7 @@ model PaymentGateway {
   testSecret String?
   liveApiKey String?
   liveSecret String?
-  updatedAt  DateTime
+  updatedAt  DateTime @updatedAt
 }
 
 model Product {
@@ -103,7 +103,7 @@ model Product {
   imageUrl       String?
   stock          Int         @default(0)
   createdAt      DateTime    @default(now())
-  updatedAt      DateTime
+  updatedAt      DateTime @updatedAt
   healthBenefits String?     @db.Text
   howToUse       String?     @db.Text
   images         String?     @db.LongText
@@ -124,7 +124,7 @@ model User {
   email     String   @unique(map: "User_email_key")
   password  String
   createdAt DateTime @default(now())
-  updatedAt DateTime
+  updatedAt DateTime @updatedAt
   order     Order[]
 }
 
