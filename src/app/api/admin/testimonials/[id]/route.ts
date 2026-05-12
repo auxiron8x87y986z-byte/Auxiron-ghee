@@ -40,7 +40,7 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
 
     const resolvedParams = await params;
     const id = parseInt(resolvedParams.id);
-    await prisma.$executeRaw`DELETE FROM Testimonial WHERE id = ${id}`;
+    await prisma.$executeRaw`DELETE FROM testimonial WHERE id = ${id}`;
 
     return NextResponse.json({ success: true });
   } catch (error) {

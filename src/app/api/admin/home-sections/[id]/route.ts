@@ -43,13 +43,13 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
     const id = parseInt(resolvedParams.id);
 
     // 1. Delete linked features
-    await prisma.$executeRaw`DELETE FROM HomeFeature WHERE sectionId = ${id}`;
+    await prisma.$executeRaw`DELETE FROM homefeature WHERE sectionId = ${id}`;
     
     // 2. Delete linked testimonials
-    await prisma.$executeRaw`DELETE FROM Testimonial WHERE sectionId = ${id}`;
+    await prisma.$executeRaw`DELETE FROM testimonial WHERE sectionId = ${id}`;
 
     // 3. Delete the section
-    await prisma.$executeRaw`DELETE FROM HomeSection WHERE id = ${id}`;
+    await prisma.$executeRaw`DELETE FROM homesection WHERE id = ${id}`;
 
     return NextResponse.json({ success: true });
   } catch (error) {

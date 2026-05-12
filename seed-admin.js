@@ -4,13 +4,13 @@ const bcrypt = require('bcryptjs');
 const prisma = new PrismaClient();
 
 async function main() {
-  const existingAdmins = await prisma.$queryRaw`SELECT * FROM AdminUser LIMIT 1`;
+  const existingAdmins = await prisma.$queryRaw`SELECT * FROM adminuser LIMIT 1`;
   const existingAdmin = existingAdmins[0];
 
   if (!existingAdmin) {
     const hashedPassword = await bcrypt.hash('Admin@123', 10);
     await prisma.$executeRaw`
-      INSERT INTO AdminUser (name, email, password, updatedAt) 
+      INSERT INTO adminuser (name, email, password, updatedAt) 
       VALUES ('Super Admin', 'admin@auxiron.com', ${hashedPassword}, NOW())
     `;
     console.log('Seeded default admin (admin@auxiron.com / Admin@123)');
@@ -19,7 +19,7 @@ async function main() {
     if (!isCurrentPasswordAdmin123) {
       const hashedPassword = await bcrypt.hash('Admin@123', 10);
       await prisma.$executeRaw`
-        UPDATE AdminUser 
+        UPDATE adminuser 
         SET password = ${hashedPassword}, updatedAt = NOW() 
         WHERE id = ${existingAdmin.id}
       `;

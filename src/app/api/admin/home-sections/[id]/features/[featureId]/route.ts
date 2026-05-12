@@ -39,7 +39,7 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
 
     const resolvedParams = await params;
     const featureId = parseInt(resolvedParams.featureId);
-    await prisma.$executeRaw`DELETE FROM HomeFeature WHERE id = ${featureId}`;
+    await prisma.$executeRaw`DELETE FROM homefeature WHERE id = ${featureId}`;
 
     return NextResponse.json({ success: true });
   } catch (error) {
