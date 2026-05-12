@@ -15,7 +15,6 @@ async function main() {
     await prisma.Product.create({
       data: {
         ...product,
-        updatedAt: new Date()
       }
     });
   }

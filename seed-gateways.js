@@ -10,7 +10,6 @@ async function main() {
       update: {},
       create: { 
         name,
-        updatedAt: new Date()
       }
     });
   }

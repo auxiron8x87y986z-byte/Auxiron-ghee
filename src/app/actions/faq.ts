@@ -33,7 +33,6 @@ export async function createFAQ(data: { question: string; answer: string; order?
         question: data.question,
         answer: data.answer,
         order,
-        updatedAt: new Date(),
       },
     });
 
@@ -58,7 +57,6 @@ export async function updateFAQ(id: number, data: { question: string; answer: st
         question: data.question,
         answer: data.answer,
         order: data.order,
-        updatedAt: new Date(),
       },
     });
 
@@ -93,7 +91,7 @@ export async function reorderFAQs(orderedIds: number[]) {
       orderedIds.map((id, index) =>
         prisma.faq.update({
           where: { id },
-          data: { order: index + 1, updatedAt: new Date() },
+          data: { order: index + 1 },
         })
       )
     );

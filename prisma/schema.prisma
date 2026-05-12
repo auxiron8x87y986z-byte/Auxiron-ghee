@@ -14,7 +14,7 @@ model AboutSection {
   content   String   @db.Text
   imageUrl  String   @db.VarChar(255)
   createdAt DateTime @default(now()) @db.Timestamp(0)
-  updatedAt DateTime @default(now()) @db.Timestamp(0)
+  updatedAt DateTime @updatedAt @db.Timestamp(0)
 
   @@map("aboutsection")
 }
@@ -34,7 +34,7 @@ model AdminUser {
   email      String    @unique(map: "AdminUser_email_key")
   password   String
   createdAt  DateTime  @default(now())
-  updatedAt  DateTime
+  updatedAt  DateTime @updatedAt
   name       String    @default("Admin")
   otp        String?   @db.VarChar(10)
   otp_expiry DateTime? @db.DateTime(0)
@@ -68,7 +68,7 @@ model BlogPost {
   metaDescription String?  @db.Text
   published       Boolean  @default(false)
   createdAt       DateTime @default(now())
-  updatedAt       DateTime
+  updatedAt       DateTime @updatedAt
   altText         String?  @db.VarChar(255)
 
   @@map("blogpost")
@@ -80,7 +80,7 @@ model ContentBlock {
   value     String   @db.Text
   page      String
   createdAt DateTime @default(now())
-  updatedAt DateTime
+  updatedAt DateTime @updatedAt
 
   @@map("contentblock")
 }
@@ -91,7 +91,7 @@ model Faq {
   answer    String   @db.Text
   order     Int?
   createdAt DateTime @default(now())
-  updatedAt DateTime
+  updatedAt DateTime @updatedAt
 
   @@map("faq")
 }
@@ -114,7 +114,7 @@ model HomeFeature {
   displayOrder Int?     @default(0)
   isActive     Boolean? @default(true)
   createdAt    DateTime @default(now()) @db.Timestamp(0)
-  updatedAt    DateTime @default(now()) @db.Timestamp(0)
+  updatedAt    DateTime @updatedAt @db.Timestamp(0)
 
   @@map("homefeature")
 }
@@ -129,7 +129,7 @@ model HomeSection {
   displayOrder Int?     @default(0)
   isActive     Boolean? @default(true)
   createdAt    DateTime @default(now()) @db.Timestamp(0)
-  updatedAt    DateTime @default(now()) @db.Timestamp(0)
+  updatedAt    DateTime @updatedAt @db.Timestamp(0)
 
   @@map("homesection")
 }
@@ -146,7 +146,7 @@ model Order {
   status        String      @default("Processing")
   items         String?     @db.LongText
   createdAt     DateTime    @default(now())
-  updatedAt     DateTime
+  updatedAt     DateTime @updatedAt
   paymentStatus String      @default("PENDING")
   transactionId String?
   userId        Int?
@@ -209,7 +209,7 @@ model PaymentGateway {
   testSecret String?
   liveApiKey String?
   liveSecret String?
-  updatedAt  DateTime
+  updatedAt  DateTime @updatedAt
 
   @@map("paymentgateway")
 }
@@ -234,7 +234,7 @@ model Product {
   imageUrl       String?
   stock          Int         @default(0)
   createdAt      DateTime    @default(now())
-  updatedAt      DateTime
+  updatedAt      DateTime @updatedAt
   healthBenefits String?     @db.Text
   howToUse       String?     @db.Text
   images         String?     @db.LongText
@@ -303,6 +303,7 @@ model SiteSettings {
   returnPolicy   String? @db.Text
   shippingPolicy String? @db.Text
   privacyPolicy  String? @db.Text
+  updatedAt      DateTime @updatedAt @default(now())
 
   @@map("sitesettings")
 }
@@ -316,7 +317,7 @@ model SMTPSettings {
   smtpEncryption String   @db.VarChar(10)
   senderEmail    String   @db.VarChar(255)
   senderName     String   @db.VarChar(255)
-  updatedAt      DateTime @default(now()) @db.Timestamp(0)
+  updatedAt      DateTime @updatedAt @db.Timestamp(0)
   otpSubject     String?  @default("Your OTP Code - Auxiron") @db.VarChar(255)
   otpTemplate    String?  @db.Text
 
@@ -333,7 +334,7 @@ model Testimonial {
   displayOrder Int?     @default(0)
   isActive     Boolean? @default(true)
   createdAt    DateTime @default(now()) @db.Timestamp(0)
-  updatedAt    DateTime @default(now()) @db.Timestamp(0)
+  updatedAt    DateTime @updatedAt @db.Timestamp(0)
 
   @@map("testimonial")
 }
@@ -354,7 +355,7 @@ model User {
   email      String    @unique(map: "User_email_key")
   password   String
   createdAt  DateTime  @default(now())
-  updatedAt  DateTime
+  updatedAt  DateTime @updatedAt
   otp        String?   @db.VarChar(10)
   otp_expiry DateTime? @db.DateTime(0)
   isVerified Boolean   @default(false)
