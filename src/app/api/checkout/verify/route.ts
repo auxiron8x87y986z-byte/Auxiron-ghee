@@ -8,7 +8,7 @@ export async function POST(request: Request) {
     const data = await request.json();
     const { paymentMethod, orderId, ...paymentDetails } = data;
 
-    const gateway = await prisma.paymentGateway.findUnique({
+    const gateway = await prisma.PaymentGateway.findUnique({
       where: { name: paymentMethod }
     });
 
@@ -19,7 +19,7 @@ export async function POST(request: Request) {
 
     if (!secretKey) return NextResponse.json({ error: "Secret key missing" }, { status: 500 });
 
-    const order = await prisma.order.findUnique({ where: { id: parseInt(orderId) } });
+    const order = await prisma.Order.findUnique({ where: { id: parseInt(orderId) } });
     if (!order) return NextResponse.json({ error: "Order not found" }, { status: 404 });
 
     if (paymentMethod === "Razorpay") {
@@ -33,13 +33,13 @@ export async function POST(request: Request) {
 
       if (generated_signature === razorpay_signature) {
         // Payment successful
-        await prisma.order.update({
+        await prisma.Order.update({
           where: { id: order.id },
           data: { paymentStatus: "PAID" }
         });
         return NextResponse.json({ success: true });
       } else {
-        await prisma.order.update({
+        await prisma.Order.update({
           where: { id: order.id },
           data: { paymentStatus: "FAILED" }
         });
@@ -53,7 +53,7 @@ export async function POST(request: Request) {
       const session = await stripe.checkout.sessions.retrieve(sessionId);
       
       if (session.payment_status === "paid") {
-        await prisma.order.update({
+        await prisma.Order.update({
           where: { id: order.id },
           data: { paymentStatus: "PAID" }
         });

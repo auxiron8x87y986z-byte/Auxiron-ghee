@@ -15,7 +15,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
     const { title, icon, description, displayOrder, isActive } = await request.json();
 
     await prisma.$executeRaw`
-      INSERT INTO HomeFeature (sectionId, title, icon, description, displayOrder, isActive)
+      INSERT INTO homefeature (sectionId, title, icon, description, displayOrder, isActive)
       VALUES (${sectionId}, ${title}, ${icon}, ${description}, ${displayOrder}, ${isActive})
     `;
 

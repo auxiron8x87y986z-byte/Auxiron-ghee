@@ -19,7 +19,7 @@ export const authOptions: NextAuthOptions = {
 
         try {
           if (credentials.loginType === "admin") {
-            const admins = await prisma.$queryRaw`SELECT id, email, password, name FROM AdminUser WHERE LOWER(email) = LOWER(${credentials.email}) LIMIT 1` as any[];
+            const admins = await prisma.$queryRaw`SELECT id, email, password, name FROM adminuser WHERE LOWER(email) = LOWER(${credentials.email}) LIMIT 1` as any[];
             
             if (admins.length === 0) {
               throw new Error("Administrator account not found.");
@@ -41,7 +41,7 @@ export const authOptions: NextAuthOptions = {
           }
 
           // Default to Customer login
-          const users = await prisma.$queryRaw`SELECT id, email, password, name, isVerified FROM User WHERE LOWER(email) = LOWER(${credentials.email}) LIMIT 1` as any[];
+          const users = await prisma.$queryRaw`SELECT id, email, password, name, isVerified FROM user WHERE LOWER(email) = LOWER(${credentials.email}) LIMIT 1` as any[];
 
           if (users.length > 0) {
             const customer = users[0];

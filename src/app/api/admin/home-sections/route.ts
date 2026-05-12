@@ -13,7 +13,7 @@ export async function POST(request: Request) {
     const { title, subtitle, content, imageUrl, sectionType, displayOrder, isActive } = await request.json();
 
     await prisma.$executeRaw`
-      INSERT INTO HomeSection (title, subtitle, content, imageUrl, sectionType, displayOrder, isActive)
+      INSERT INTO homesection (title, subtitle, content, imageUrl, sectionType, displayOrder, isActive)
       VALUES (${title}, ${subtitle}, ${content}, ${imageUrl}, ${sectionType}, ${displayOrder}, ${isActive})
     `;
 

@@ -13,7 +13,7 @@ export async function POST(request: Request) {
     const { name, location, review, rating, displayOrder, isActive } = await request.json();
 
     await prisma.$executeRaw`
-      INSERT INTO Testimonial (name, location, review, rating, displayOrder, isActive)
+      INSERT INTO testimonial (name, location, review, rating, displayOrder, isActive)
       VALUES (${name}, ${location}, ${review}, ${rating}, ${displayOrder}, ${isActive})
     `;
 

@@ -6,7 +6,7 @@ export const dynamic = "force-dynamic";
 
 export default async function HomeSectionsAdminPage() {
   const sections = await dbFetch(
-    () => prisma.$queryRaw`SELECT * FROM HomeSection ORDER BY displayOrder ASC` as any,
+    () => prisma.$queryRaw`SELECT * FROM homesection ORDER BY displayOrder ASC` as any,
     []
   );
 

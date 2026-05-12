@@ -6,13 +6,13 @@ export async function POST(request: Request) {
     const { email, otp } = await request.json();
 
     // Try finding in User first
-    const users = await prisma.$queryRaw`SELECT id, otp_expiry, isVerified FROM User WHERE email = ${email} AND otp = ${otp} LIMIT 1` as any[];
+    const users = await prisma.$queryRaw`SELECT id, otp_expiry, isVerified FROM user WHERE email = ${email} AND otp = ${otp} LIMIT 1` as any[];
     
     let dbUser = users[0];
     let isAdmin = false;
 
     if (!dbUser) {
-      const admins = await prisma.$queryRaw`SELECT id, otp_expiry FROM AdminUser WHERE email = ${email} AND otp = ${otp} LIMIT 1` as any[];
+      const admins = await prisma.$queryRaw`SELECT id, otp_expiry FROM adminuser WHERE email = ${email} AND otp = ${otp} LIMIT 1` as any[];
       dbUser = admins[0];
       isAdmin = true;
     }
@@ -31,7 +31,7 @@ export async function POST(request: Request) {
     // If it's a regular user, mark as verified
     if (!isAdmin && !dbUser.isVerified) {
       await prisma.$executeRaw`
-        UPDATE User SET isVerified = 1, otp = NULL, otp_expiry = NULL WHERE id = ${dbUser.id}
+        UPDATE user SET isVerified = 1, otp = NULL, otp_expiry = NULL WHERE id = ${dbUser.id}
       `;
     } 
     // Note: We don't clear the OTP here for Admins or verified Users 

@@ -15,7 +15,7 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
     const { title, icon, description, displayOrder, isActive } = await request.json();
 
     await prisma.$executeRaw`
-      UPDATE HomeFeature 
+      UPDATE homefeature 
       SET title = ${title}, 
           icon = ${icon}, 
           description = ${description}, 

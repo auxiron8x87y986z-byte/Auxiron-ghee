@@ -15,7 +15,7 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
     const { title, subtitle, content, imageUrl, sectionType, displayOrder, isActive } = await request.json();
 
     await prisma.$executeRaw`
-      UPDATE HomeSection 
+      UPDATE homesection 
       SET title = ${title}, 
           subtitle = ${subtitle}, 
           content = ${content}, 

@@ -5,7 +5,7 @@ export const dynamic = "force-dynamic";
 
 export default async function AdminOrders() {
   const orders = await dbFetch(
-    () => prisma.order.findMany({ orderBy: { createdAt: 'desc' } }),
+    () => prisma.Order.findMany({ orderBy: { createdAt: 'desc' } }),
     []
   );
 

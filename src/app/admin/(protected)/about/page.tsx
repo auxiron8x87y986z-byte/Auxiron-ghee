@@ -7,7 +7,7 @@ export default async function AboutSettingsPage() {
   const keys = ["about_heading", "about_intro", "about_hero_image", "about_method_heading", "about_method_text", "about_farm_image", "about_promise_heading", "about_purity_image", "about_promise_items", "about_extra_sections"];
   
   const blocks = await dbFetch(
-    () => prisma.$queryRaw`SELECT \`key\`, \`value\` FROM ContentBlock WHERE \`key\` IN (${keys.join(',')})` as Promise<Array<{ key: string; value: string }>>,
+    () => prisma.$queryRaw`SELECT \`key\`, \`value\` FROM contentblock WHERE \`key\` IN (${keys.join(',')})` as Promise<Array<{ key: string; value: string }>>,
     []
   );
 

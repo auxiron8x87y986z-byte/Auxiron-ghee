@@ -8,24 +8,28 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model aboutsection {
+model AboutSection {
   id        Int      @id @default(autoincrement())
   heading   String   @db.VarChar(255)
   content   String   @db.Text
   imageUrl  String   @db.VarChar(255)
   createdAt DateTime @default(now()) @db.Timestamp(0)
   updatedAt DateTime @default(now()) @db.Timestamp(0)
+
+  @@map("aboutsection")
 }
 
-model admin_users {
+model AdminUsersLegacy {
   id        Int       @id @default(autoincrement())
   username  String    @unique(map: "username") @db.VarChar(100)
   password  String    @db.VarChar(255)
   role      String?   @default("admin") @db.VarChar(50)
   createdAt DateTime? @default(now()) @db.DateTime(0)
+
+  @@map("admin_users")
 }
 
-model adminuser {
+model AdminUser {
   id         Int       @id @default(autoincrement())
   email      String    @unique(map: "AdminUser_email_key")
   password   String
@@ -34,9 +38,11 @@ model adminuser {
   name       String    @default("Admin")
   otp        String?   @db.VarChar(10)
   otp_expiry DateTime? @db.DateTime(0)
+
+  @@map("adminuser")
 }
 
-model blog_posts {
+model BlogPostsLegacy {
   id              Int       @id @default(autoincrement())
   title           String    @db.VarChar(255)
   slug            String    @unique(map: "slug") @db.VarChar(255)
@@ -47,9 +53,11 @@ model blog_posts {
   published       Boolean?  @default(true)
   createdAt       DateTime? @default(now()) @db.DateTime(0)
   updatedAt       DateTime? @default(now()) @db.DateTime(0)
+
+  @@map("blog_posts")
 }
 
-model blogpost {
+model BlogPost {
   id              Int      @id @default(autoincrement())
   title           String
   slug            String   @unique(map: "BlogPost_slug_key")
@@ -62,34 +70,42 @@ model blogpost {
   createdAt       DateTime @default(now())
   updatedAt       DateTime
   altText         String?  @db.VarChar(255)
+
+  @@map("blogpost")
 }
 
-model contentblock {
+model ContentBlock {
   id        Int      @id @default(autoincrement())
   key       String   @unique(map: "ContentBlock_key_key")
   value     String   @db.Text
   page      String
   createdAt DateTime @default(now())
   updatedAt DateTime
+
+  @@map("contentblock")
 }
 
-model faq {
+model Faq {
   id        Int      @id @default(autoincrement())
   question  String   @db.Text
   answer    String   @db.Text
   order     Int?
   createdAt DateTime @default(now())
   updatedAt DateTime
+
+  @@map("faq")
 }
 
-model faqs {
+model FaqsLegacy {
   id       Int    @id @default(autoincrement())
   question String @db.VarChar(255)
   answer   String @db.Text
   order    Int?   @default(0)
+
+  @@map("faqs")
 }
 
-model homefeature {
+model HomeFeature {
   id           Int      @id @default(autoincrement())
   sectionId    Int
   icon         String?  @default("✨") @db.VarChar(50)
@@ -99,9 +115,11 @@ model homefeature {
   isActive     Boolean? @default(true)
   createdAt    DateTime @default(now()) @db.Timestamp(0)
   updatedAt    DateTime @default(now()) @db.Timestamp(0)
+
+  @@map("homefeature")
 }
 
-model homesection {
+model HomeSection {
   id           Int      @id @default(autoincrement())
   title        String   @db.VarChar(255)
   subtitle     String?  @db.VarChar(255)
@@ -112,9 +130,11 @@ model homesection {
   isActive     Boolean? @default(true)
   createdAt    DateTime @default(now()) @db.Timestamp(0)
   updatedAt    DateTime @default(now()) @db.Timestamp(0)
+
+  @@map("homesection")
 }
 
-model order {
+model Order {
   id            Int         @id @default(autoincrement())
   customerName  String
   customerPhone String
@@ -130,26 +150,28 @@ model order {
   paymentStatus String      @default("PENDING")
   transactionId String?
   userId        Int?
-  user          user?       @relation(fields: [userId], references: [id], map: "Order_userId_fkey")
-  orderitem     orderitem[]
+  user          User?       @relation(fields: [userId], references: [id], map: "Order_userId_fkey")
+  orderitem     OrderItem[]
 
   @@index([userId], map: "Order_userId_fkey")
+  @@map("order")
 }
 
-model orderitem {
+model OrderItem {
   id        Int     @id @default(autoincrement())
   orderId   Int
   productId Int
   quantity  Int
   price     Float
-  order     order   @relation(fields: [orderId], references: [id], map: "OrderItem_orderId_fkey")
-  product   product @relation(fields: [productId], references: [id], map: "OrderItem_productId_fkey")
+  order     Order   @relation(fields: [orderId], references: [id], map: "OrderItem_orderId_fkey")
+  product   Product @relation(fields: [productId], references: [id], map: "OrderItem_productId_fkey")
 
   @@index([orderId], map: "OrderItem_orderId_fkey")
   @@index([productId], map: "OrderItem_productId_fkey")
+  @@map("orderitem")
 }
 
-model orders {
+model OrdersLegacy {
   id            Int       @id @default(autoincrement())
   customerName  String    @db.VarChar(255)
   customerPhone String    @db.VarChar(20)
@@ -163,18 +185,22 @@ model orders {
   userId        Int?
   createdAt     DateTime? @default(now()) @db.DateTime(0)
   updatedAt     DateTime? @default(now()) @db.DateTime(0)
+
+  @@map("orders")
 }
 
-model payment_gateways {
+model PaymentGatewaysLegacy {
   id          Int                    @id @default(autoincrement())
   gatewayName String                 @db.VarChar(50)
   isEnabled   Boolean?               @default(false)
   apiKey      String?                @db.VarChar(255)
   apiSecret   String?                @db.VarChar(255)
   mode        payment_gateways_mode? @default(test)
+
+  @@map("payment_gateways")
 }
 
-model paymentgateway {
+model PaymentGateway {
   id         Int      @id @default(autoincrement())
   name       String   @unique(map: "PaymentGateway_name_key")
   enabled    Boolean  @default(false)
@@ -184,18 +210,22 @@ model paymentgateway {
   liveApiKey String?
   liveSecret String?
   updatedAt  DateTime
+
+  @@map("paymentgateway")
 }
 
-model paymentgatewayconfig {
+model PaymentGatewayConfig {
   id          Int                        @id @default(autoincrement())
   gatewayName String                     @db.VarChar(50)
   isEnabled   Boolean?                   @default(false)
   apiKey      String?                    @db.VarChar(255)
   apiSecret   String?                    @db.VarChar(255)
   mode        paymentgatewayconfig_mode? @default(test)
+
+  @@map("paymentgatewayconfig")
 }
 
-model product {
+model Product {
   id             Int         @id @default(autoincrement())
   name           String
   description    String      @db.Text
@@ -208,10 +238,12 @@ model product {
   healthBenefits String?     @db.Text
   howToUse       String?     @db.Text
   images         String?     @db.LongText
-  orderitem      orderitem[]
+  orderitem      OrderItem[]
+
+  @@map("product")
 }
 
-model products {
+model ProductsLegacy {
   id              Int       @id @default(autoincrement())
   name            String    @db.VarChar(255)
   description     String    @db.Text
@@ -223,17 +255,21 @@ model products {
   how_to_use      String?   @db.Text
   createdAt       DateTime? @default(now()) @db.DateTime(0)
   updatedAt       DateTime? @default(now()) @db.DateTime(0)
+
+  @@map("products")
 }
 
-model settings {
+model SettingsLegacy {
   id             Int     @id @default(autoincrement())
   contactEmail   String
   whatsappNumber String
   supportEmail   String?
   location       String?
+
+  @@map("settings")
 }
 
-model site_settings {
+model SiteSettingsLegacy {
   id             Int     @id @default(autoincrement())
   siteName       String? @default("Auxiron Ghee") @db.VarChar(255)
   siteTagline    String? @default("Identity of Purity") @db.VarChar(255)
@@ -248,9 +284,11 @@ model site_settings {
   returnPolicy   String? @db.Text
   shippingPolicy String? @db.Text
   privacyPolicy  String? @db.Text
+
+  @@map("site_settings")
 }
 
-model sitesettings {
+model SiteSettings {
   id             Int     @id @default(autoincrement())
   siteName       String? @default("Auxiron Ghee") @db.VarChar(255)
   siteTagline    String? @default("Identity of Purity") @db.VarChar(255)
@@ -265,9 +303,11 @@ model sitesettings {
   returnPolicy   String? @db.Text
   shippingPolicy String? @db.Text
   privacyPolicy  String? @db.Text
+
+  @@map("sitesettings")
 }
 
-model smtpsettings {
+model SMTPSettings {
   id             Int      @id @default(autoincrement())
   smtpHost       String   @db.VarChar(255)
   smtpPort       String   @db.VarChar(10)
@@ -279,9 +319,11 @@ model smtpsettings {
   updatedAt      DateTime @default(now()) @db.Timestamp(0)
   otpSubject     String?  @default("Your OTP Code - Auxiron") @db.VarChar(255)
   otpTemplate    String?  @db.Text
+
+  @@map("smtpsettings")
 }
 
-model testimonial {
+model Testimonial {
   id           Int      @id @default(autoincrement())
   sectionId    Int?
   name         String   @db.VarChar(255)
@@ -292,17 +334,21 @@ model testimonial {
   isActive     Boolean? @default(true)
   createdAt    DateTime @default(now()) @db.Timestamp(0)
   updatedAt    DateTime @default(now()) @db.Timestamp(0)
+
+  @@map("testimonial")
 }
 
-model testimonials {
+model TestimonialsLegacy {
   id           Int       @id @default(autoincrement())
   customerName String    @db.VarChar(255)
   rating       Int?      @default(5)
   content      String    @db.Text
   createdAt    DateTime? @default(now()) @db.DateTime(0)
+
+  @@map("testimonials")
 }
 
-model user {
+model User {
   id         Int       @id @default(autoincrement())
   name       String
   email      String    @unique(map: "User_email_key")
@@ -313,10 +359,12 @@ model user {
   otp_expiry DateTime? @db.DateTime(0)
   isVerified Boolean   @default(false)
   location   String?   @db.VarChar(255)
-  order      order[]
+  order      Order[]
+
+  @@map("user")
 }
 
-model users {
+model UsersLegacy {
   id        Int       @id @default(autoincrement())
   name      String    @db.VarChar(255)
   email     String    @unique(map: "email") @db.VarChar(255)
@@ -325,6 +373,8 @@ model users {
   address   String?   @db.Text
   createdAt DateTime? @default(now()) @db.DateTime(0)
   updatedAt DateTime? @default(now()) @db.DateTime(0)
+
+  @@map("users")
 }
 
 enum paymentgatewayconfig_mode {

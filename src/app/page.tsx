@@ -6,7 +6,7 @@ import { getContactSettings } from "@/app/actions/settings";
 import FaqAccordion from "@/components/FaqAccordion";
 export default async function Home() {
   const blocks = await dbFetch(
-    () => prisma.$queryRaw`SELECT \`key\`, \`value\` FROM ContentBlock WHERE \`key\` IN ('hero_background', 'hero_background_mobile')` as Promise<Array<{ key: string; value: string }>>,
+    () => prisma.$queryRaw`SELECT \`key\`, \`value\` FROM contentblock WHERE \`key\` IN ('hero_background', 'hero_background_mobile')` as Promise<Array<{ key: string; value: string }>>,
     [] as Array<{ key: string; value: string }>
   );
   const heroBg = blocks.find(b => b.key === "hero_background")?.value || "/images/auxiron_hero_premium.png";
@@ -16,17 +16,17 @@ export default async function Home() {
   const { settings } = await getContactSettings();
 
   const sections = await dbFetch(
-    () => prisma.$queryRaw`SELECT * FROM HomeSection WHERE isActive = 1 ORDER BY displayOrder ASC` as any[],
+    () => prisma.$queryRaw`SELECT * FROM homesection WHERE isActive = 1 ORDER BY displayOrder ASC` as any[],
     []
   );
 
   const testimonials = await dbFetch(
-    () => prisma.$queryRaw`SELECT * FROM Testimonial WHERE isActive = 1 ORDER BY displayOrder ASC` as any[],
+    () => prisma.$queryRaw`SELECT * FROM testimonial WHERE isActive = 1 ORDER BY displayOrder ASC` as any[],
     []
   );
 
   const allFeatures = await dbFetch(
-    () => prisma.$queryRaw`SELECT * FROM HomeFeature WHERE isActive = 1 ORDER BY displayOrder ASC` as any[],
+    () => prisma.$queryRaw`SELECT * FROM homefeature WHERE isActive = 1 ORDER BY displayOrder ASC` as any[],
     []
   );
 

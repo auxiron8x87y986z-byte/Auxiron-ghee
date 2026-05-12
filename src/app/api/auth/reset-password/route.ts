@@ -6,12 +6,12 @@ export async function POST(request: Request) {
   try {
     const { email, otp, password } = await request.json();
 
-    let user = await prisma.$queryRaw`SELECT id, otp_expiry FROM User WHERE email = ${email} AND otp = ${otp}` as any[];
-    let table = "User";
+    let user = await prisma.$queryRaw`SELECT id, otp_expiry FROM user WHERE email = ${email} AND otp = ${otp}` as any[];
+    let table = "user";
 
     if (user.length === 0) {
-      user = await prisma.$queryRaw`SELECT id, otp_expiry FROM AdminUser WHERE email = ${email} AND otp = ${otp}` as any[];
-      table = "AdminUser";
+      user = await prisma.$queryRaw`SELECT id, otp_expiry FROM adminuser WHERE email = ${email} AND otp = ${otp}` as any[];
+      table = "adminuser";
     }
     
     if (user.length === 0) {

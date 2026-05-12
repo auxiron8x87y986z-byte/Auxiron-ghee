@@ -16,11 +16,11 @@ export async function POST(request: Request) {
     // We use $queryRaw because the table might not be in the Prisma schema yet
     // or we can use $executeRaw
     
-    const existing = await prisma.$queryRaw`SELECT id FROM SMTPSettings LIMIT 1` as any[];
+    const existing = await prisma.$queryRaw`SELECT id FROM smtpsettings LIMIT 1` as any[];
     
     if (existing.length > 0) {
       await prisma.$executeRaw`
-        UPDATE SMTPSettings 
+        UPDATE smtpsettings 
         SET smtpHost = ${smtpHost}, 
             smtpPort = ${smtpPort}, 
             smtpUsername = ${smtpUsername}, 
@@ -34,7 +34,7 @@ export async function POST(request: Request) {
       `;
     } else {
       await prisma.$executeRaw`
-        INSERT INTO SMTPSettings (smtpHost, smtpPort, smtpUsername, smtpPassword, smtpEncryption, senderEmail, senderName, otpSubject, otpTemplate)
+        INSERT INTO smtpsettings (smtpHost, smtpPort, smtpUsername, smtpPassword, smtpEncryption, senderEmail, senderName, otpSubject, otpTemplate)
         VALUES (${smtpHost}, ${smtpPort}, ${smtpUsername}, ${smtpPassword}, ${smtpEncryption}, ${senderEmail}, ${senderName}, ${otpSubject}, ${otpTemplate})
       `;
     }

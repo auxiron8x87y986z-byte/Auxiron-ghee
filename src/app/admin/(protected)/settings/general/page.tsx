@@ -5,7 +5,7 @@ export const dynamic = "force-dynamic";
 
 export default async function GeneralSettingsPage() {
   const blocks = await dbFetch(
-    () => prisma.$queryRaw`SELECT \`key\`, \`value\` FROM ContentBlock WHERE \`key\` IN ('site_logo', 'site_tagline', 'hero_background', 'hero_background_mobile')` as Promise<Array<{ key: string; value: string }>>,
+    () => prisma.$queryRaw`SELECT \`key\`, \`value\` FROM contentblock WHERE \`key\` IN ('site_logo', 'site_tagline', 'hero_background', 'hero_background_mobile')` as Promise<Array<{ key: string; value: string }>>,
     []
   );
 

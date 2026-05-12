@@ -12,13 +12,13 @@ export async function POST(request: Request) {
     }
 
     // Check if email already exists in AdminUser
-    const existingAdmin = await prisma.$queryRaw`SELECT id FROM AdminUser WHERE email = ${email} LIMIT 1` as any[];
+    const existingAdmin = await prisma.$queryRaw`SELECT id FROM adminuser WHERE email = ${email} LIMIT 1` as any[];
     if (existingAdmin.length > 0) {
       return NextResponse.json({ error: "Email already registered" }, { status: 400 });
     }
 
     // Check if user already exists and is verified
-    const existingUser = await prisma.$queryRaw`SELECT id, isVerified FROM User WHERE email = ${email} LIMIT 1` as any[];
+    const existingUser = await prisma.$queryRaw`SELECT id, isVerified FROM user WHERE email = ${email} LIMIT 1` as any[];
     
     if (existingUser.length > 0 && existingUser[0].isVerified) {
       return NextResponse.json({ error: "Email already registered" }, { status: 400 });
@@ -31,20 +31,20 @@ export async function POST(request: Request) {
     if (existingUser.length > 0) {
       // Update existing unverified user
       await prisma.$executeRaw`
-        UPDATE User 
+        UPDATE user 
         SET name = ${name}, password = ${hashedPassword}, otp = ${otp}, otp_expiry = ${otpExpiry} 
         WHERE id = ${existingUser[0].id}
       `;
     } else {
       // Create new unverified user
       await prisma.$executeRaw`
-        INSERT INTO User (name, email, password, isVerified, otp, otp_expiry) 
+        INSERT INTO user (name, email, password, isVerified, otp, otp_expiry) 
         VALUES (${name}, ${email}, ${hashedPassword}, 0, ${otp}, ${otpExpiry})
       `;
     }
 
     // Fetch SMTP Settings for Signup OTP
-    const smtpRes = await prisma.$queryRaw`SELECT otpSubject, otpTemplate, senderName FROM SMTPSettings LIMIT 1` as any[];
+    const smtpRes = await prisma.$queryRaw`SELECT otpSubject, otpTemplate, senderName FROM smtpsettings LIMIT 1` as any[];
     const smtp = smtpRes[0] || {};
     
     const subject = smtp.otpSubject || "Verify Your Account - Auxiron";

@@ -6,7 +6,7 @@ export default async function EditTestimonialPage({ params }: { params: Promise<
   const resolvedParams = await params;
   const id = parseInt(resolvedParams.id);
   const testimonials = await dbFetch(
-    () => prisma.$queryRaw`SELECT * FROM Testimonial WHERE id = ${id}` as any,
+    () => prisma.$queryRaw`SELECT * FROM testimonial WHERE id = ${id}` as any,
     []
   );
 

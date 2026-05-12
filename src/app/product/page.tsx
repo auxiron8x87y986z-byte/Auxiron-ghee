@@ -5,7 +5,7 @@ export const dynamic = "force-dynamic";
 
 export default async function ProductPage() {
   const products = await dbFetch(
-    () => prisma.product.findMany({ orderBy: { volume: 'asc' } }),
+    () => prisma.Product.findMany({ orderBy: { volume: 'asc' } }),
     []
   );
 

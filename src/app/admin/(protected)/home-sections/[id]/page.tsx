@@ -6,7 +6,7 @@ export default async function EditHomeSectionPage({ params }: { params: Promise<
   const resolvedParams = await params;
   const id = parseInt(resolvedParams.id);
   const sections = await dbFetch(
-    () => prisma.$queryRaw`SELECT * FROM HomeSection WHERE id = ${id}` as any,
+    () => prisma.$queryRaw`SELECT * FROM homesection WHERE id = ${id}` as any,
     []
   );
 

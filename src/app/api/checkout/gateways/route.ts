@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 
 export async function GET() {
   try {
-    const gateways = await prisma.paymentGateway.findMany({
+    const gateways = await prisma.PaymentGateway.findMany({
       where: { enabled: true },
       select: { name: true } // Only select the name, DO NOT expose keys
     });

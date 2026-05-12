@@ -3,7 +3,7 @@ import { prisma } from "./prisma";
 
 export async function sendMail({ to, subject, body }: { to: string; subject: string; body: string }) {
   try {
-    const settings = await prisma.$queryRaw`SELECT * FROM SMTPSettings LIMIT 1` as any[];
+    const settings = await prisma.$queryRaw`SELECT * FROM smtpsettings LIMIT 1` as any[];
     
     if (settings.length === 0) {
       throw new Error("SMTP settings not configured");

@@ -8,12 +8,12 @@ export default async function SectionTestimonialsPage({ params }: { params: Prom
   const sectionId = parseInt(resolvedParams.id);
 
   const section = await dbFetch(
-    () => prisma.$queryRaw`SELECT title FROM HomeSection WHERE id = ${sectionId}` as any,
+    () => prisma.$queryRaw`SELECT title FROM homesection WHERE id = ${sectionId}` as any,
     [] as any[]
   );
 
   const testimonials = await dbFetch(
-    () => prisma.$queryRaw`SELECT * FROM Testimonial WHERE sectionId = ${sectionId} ORDER BY displayOrder ASC` as any,
+    () => prisma.$queryRaw`SELECT * FROM testimonial WHERE sectionId = ${sectionId} ORDER BY displayOrder ASC` as any,
     [] as any[]
   );
 

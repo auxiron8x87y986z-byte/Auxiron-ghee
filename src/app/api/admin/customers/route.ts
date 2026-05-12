@@ -18,9 +18,9 @@ export async function GET() {
         u.email, 
         u.createdAt as signupDate, 
         u.isVerified,
-        (SELECT city FROM \`Order\` WHERE userId = u.id ORDER BY createdAt DESC LIMIT 1) as location,
-        (SELECT COUNT(*) FROM \`Order\` WHERE userId = u.id) as orderCount
-      FROM User u
+        (SELECT city FROM \`order\` WHERE userId = u.id ORDER BY createdAt DESC LIMIT 1) as location,
+        (SELECT COUNT(*) FROM \`order\` WHERE userId = u.id) as orderCount
+      FROM user u
       ORDER BY u.createdAt DESC
     ` as any[];
 

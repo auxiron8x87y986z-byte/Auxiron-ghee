@@ -29,7 +29,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const blocks = await dbFetch(
-    () => prisma.$queryRaw`SELECT \`key\`, \`value\` FROM ContentBlock WHERE \`key\` IN ('site_logo', 'site_tagline')` as Promise<Array<{ key: string; value: string }>>,
+    () => prisma.$queryRaw`SELECT \`key\`, \`value\` FROM contentblock WHERE \`key\` IN ('site_logo', 'site_tagline')` as Promise<Array<{ key: string; value: string }>>,
     [] as Array<{ key: string; value: string }>
   );
 

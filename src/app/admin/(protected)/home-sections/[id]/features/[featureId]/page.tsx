@@ -9,7 +9,7 @@ export default async function EditFeaturePage({ params }: { params: Promise<{ id
   const featureId = parseInt(resolvedParams.featureId);
 
   const features = await dbFetch(
-    () => prisma.$queryRaw`SELECT * FROM HomeFeature WHERE id = ${featureId}` as any,
+    () => prisma.$queryRaw`SELECT * FROM homefeature WHERE id = ${featureId}` as any,
     []
   );
 

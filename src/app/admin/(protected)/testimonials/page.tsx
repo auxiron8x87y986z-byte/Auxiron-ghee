@@ -5,7 +5,7 @@ export const dynamic = "force-dynamic";
 
 export default async function TestimonialsAdminPage() {
   const testimonials = await dbFetch(
-    () => prisma.$queryRaw`SELECT * FROM Testimonial ORDER BY displayOrder ASC` as any,
+    () => prisma.$queryRaw`SELECT * FROM testimonial ORDER BY displayOrder ASC` as any,
     []
   );
 

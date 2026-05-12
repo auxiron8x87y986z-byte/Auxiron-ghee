@@ -7,14 +7,14 @@ export async function POST(request: Request) {
     const { email } = await request.json();
 
     // Use Raw SQL to find user
-    const users = await prisma.$queryRaw`SELECT id, name FROM User WHERE email = ${email} LIMIT 1` as any[];
+    const users = await prisma.$queryRaw`SELECT id, name FROM user WHERE email = ${email} LIMIT 1` as any[];
     let user = users[0];
-    let table = "User";
+    let table = "user";
 
     if (!user) {
-      const admins = await prisma.$queryRaw`SELECT id, name FROM AdminUser WHERE email = ${email} LIMIT 1` as any[];
+      const admins = await prisma.$queryRaw`SELECT id, name FROM adminuser WHERE email = ${email} LIMIT 1` as any[];
       user = admins[0];
-      table = "AdminUser";
+      table = "adminuser";
     }
 
     if (!user) {
@@ -28,7 +28,7 @@ export async function POST(request: Request) {
     await prisma.$executeRawUnsafe(`UPDATE ${table} SET otp = ?, otp_expiry = ? WHERE id = ?`, otp, otpExpiry, user.id);
 
     // Fetch Template from DB
-    const smtpRes = await prisma.$queryRaw`SELECT otpSubject, otpTemplate FROM SMTPSettings LIMIT 1` as any[];
+    const smtpRes = await prisma.$queryRaw`SELECT otpSubject, otpTemplate FROM smtpsettings LIMIT 1` as any[];
     const smtpSettings = smtpRes[0] || {};
     
     const subject = smtpSettings.otpSubject || "Reset Your Password - Auxiron";

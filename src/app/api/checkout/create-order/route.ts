@@ -9,7 +9,7 @@ export async function POST(request: Request) {
     const { items, totalAmount, customerInfo, paymentMethod } = data;
 
     // 1. Fetch enabled gateway config
-    const gateway = await prisma.paymentGateway.findUnique({
+    const gateway = await prisma.PaymentGateway.findUnique({
       where: { name: paymentMethod }
     });
 
@@ -23,7 +23,7 @@ export async function POST(request: Request) {
     const session = await getServerSession(authOptions);
     const userId = session?.user ? parseInt((session.user as any).id) : null;
 
-    const order = await prisma.order.create({
+    const order = await prisma.Order.create({
       data: {
         customerName: customerInfo.name,
         customerPhone: customerInfo.phone,
@@ -57,7 +57,7 @@ export async function POST(request: Request) {
       const rzpOrder = await razorpay.orders.create(options);
       
       // Save Razorpay order ID to our order's transactionId
-      await prisma.order.update({
+      await prisma.Order.update({
         where: { id: order.id },
         data: { transactionId: rzpOrder.id }
       });
@@ -95,7 +95,7 @@ export async function POST(request: Request) {
         }
       });
 
-      await prisma.order.update({
+      await prisma.Order.update({
         where: { id: order.id },
         data: { transactionId: session.id }
       });

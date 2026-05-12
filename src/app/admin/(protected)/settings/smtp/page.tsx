@@ -5,7 +5,7 @@ export const dynamic = "force-dynamic";
 
 export default async function SMTPSettingsPage() {
   const settings = await dbFetch(
-    () => prisma.$queryRaw`SELECT * FROM SMTPSettings LIMIT 1`,
+    () => prisma.$queryRaw`SELECT * FROM smtpsettings LIMIT 1`,
     []
   );
 

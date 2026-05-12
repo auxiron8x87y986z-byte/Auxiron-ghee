@@ -14,7 +14,7 @@ export async function createProduct(formData: FormData) {
   const healthBenefits = formData.get("healthBenefits") as string || null;
   const howToUse = formData.get("howToUse") as string || null;
 
-  await prisma.product.create({
+  await prisma.Product.create({
     data: { name, description, price, volume, stock, imageUrl, images, healthBenefits, howToUse }
   });
 
@@ -34,7 +34,7 @@ export async function updateProduct(id: number, formData: FormData) {
   const healthBenefits = formData.get("healthBenefits") as string || null;
   const howToUse = formData.get("howToUse") as string || null;
 
-  await prisma.product.update({
+  await prisma.Product.update({
     where: { id },
     data: { name, description, price, volume, stock, imageUrl, images, healthBenefits, howToUse }
   });
@@ -49,7 +49,7 @@ import path from "path";
 
 export async function deleteProduct(id: number) {
   try {
-    const product = await prisma.product.findUnique({ where: { id } });
+    const product = await prisma.Product.findUnique({ where: { id } });
     if (!product) return { success: false, error: "Product not found" };
 
     if (product.imageUrl && product.imageUrl.startsWith("/uploads/")) {
@@ -62,7 +62,7 @@ export async function deleteProduct(id: number) {
       }
     }
 
-    await prisma.product.delete({ where: { id } });
+    await prisma.Product.delete({ where: { id } });
     revalidatePath("/admin/products");
     revalidatePath("/product");
     return { success: true };

@@ -15,7 +15,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
     const { name, location, review, rating, displayOrder, isActive } = await request.json();
 
     await prisma.$executeRaw`
-      INSERT INTO Testimonial (sectionId, name, location, review, rating, displayOrder, isActive)
+      INSERT INTO testimonial (sectionId, name, location, review, rating, displayOrder, isActive)
       VALUES (${sectionId}, ${name}, ${location}, ${review}, ${rating}, ${displayOrder}, ${isActive})
     `;
 
