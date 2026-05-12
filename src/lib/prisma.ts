@@ -1,6 +1,10 @@
 import { PrismaClient } from '@prisma/client'
 import { PrismaMariaDb } from '@prisma/adapter-mariadb'
 import { createPool } from 'mariadb'
+import { validateEnv } from './env'
+
+// Validate environment variables on startup
+validateEnv();
 
 const globalForPrisma = global as unknown as {
   prisma: PrismaClient
