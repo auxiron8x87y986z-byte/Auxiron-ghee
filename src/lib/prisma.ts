@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client'
 import { PrismaMariaDb } from '@prisma/adapter-mariadb'
 import { createPool } from 'mariadb'
+import { getDatabaseUrl } from './db-utils'
 import { validateEnv } from './env'
 
 // Validate environment variables on startup
@@ -10,10 +11,11 @@ const globalForPrisma = global as unknown as {
   prisma: PrismaClient
 }
 
-const rawConnectionString = process.env.DATABASE_URL || 'mysql://root@localhost:3306/auxiron_ghee';
+const rawConnectionString = getDatabaseUrl();
 const connectionString = rawConnectionString.replace('mysql://', 'mariadb://');
 const pool = createPool(connectionString);
 const adapter = new PrismaMariaDb(pool);
+
 
 
 
