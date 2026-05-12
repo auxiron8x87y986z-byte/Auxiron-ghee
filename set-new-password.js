@@ -1,14 +1,24 @@
 const { PrismaClient } = require('@prisma/client');
+const { PrismaMariaDb } = require('@prisma/adapter-mariadb');
+const mariadb = require('mariadb');
 const bcrypt = require('bcryptjs');
+const dotenv = require('dotenv');
+
+dotenv.config();
+
+const rawConnectionString = process.env.DATABASE_URL || 'mysql://root@localhost:3306/auxiron_ghee';
+const connectionString = rawConnectionString.replace('mysql://', 'mariadb://');
+const pool = mariadb.createPool(connectionString);
+const adapter = new PrismaMariaDb(pool);
+const prisma = new PrismaClient({ adapter });
 
 async function main() {
-  const prisma = new PrismaClient();
   const hash = await bcrypt.hash('Admin@123', 10);
   
   await prisma.adminUser.upsert({
     where: { email: 'admin@auxiron.com' },
     update: { password: hash },
-    create: { email: 'admin@auxiron.com', password: hash }
+    create: { email: 'admin@auxiron.com', password: hash, name: 'Admin' }
   });
   
   console.log("Password successfully updated to Admin@123");
@@ -23,4 +33,8 @@ async function main() {
 
 main()
   .catch(console.error)
-  .finally(() => process.exit(0));
+  .finally(async () => {
+    await prisma.$disconnect();
+    await pool.end();
+    process.exit(0);
+  });

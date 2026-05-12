@@ -33,5 +33,6 @@ main()
   .catch(console.error)
   .finally(async () => {
     await prisma.$disconnect();
+    await pool.end();
     process.exit(0);
   });

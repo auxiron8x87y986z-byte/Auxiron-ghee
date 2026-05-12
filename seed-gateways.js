@@ -24,4 +24,10 @@ async function main() {
   console.log('Seeded Payment Gateways');
 }
 
-main().catch(console.error).finally(() => process.exit(0));
+main()
+  .catch(console.error)
+  .finally(async () => {
+    await prisma.$disconnect();
+    await pool.end();
+    process.exit(0);
+  });

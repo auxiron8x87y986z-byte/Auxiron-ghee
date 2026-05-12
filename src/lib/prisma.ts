@@ -8,23 +8,39 @@ import { validateEnv } from './env'
 validateEnv();
 
 const globalForPrisma = global as unknown as {
-  prisma: PrismaClient
+  prisma: PrismaClient | undefined
+  pool: any | undefined
+  adapter: any | undefined
 }
 
-const rawConnectionString = getDatabaseUrl();
-const connectionString = rawConnectionString.replace('mysql://', 'mariadb://');
-const pool = createPool(connectionString);
-const adapter = new PrismaMariaDb(pool);
+if (!globalForPrisma.prisma) {
+  const rawConnectionString = getDatabaseUrl();
+  // Ensure the protocol is correct for the mariadb driver
+  const connectionString = rawConnectionString.replace('mysql://', 'mariadb://');
+  
+  console.log('Initializing Prisma Client with MariaDB adapter...');
+  
+  // Create pool with optimized production settings
+  const pool = createPool({
+    uri: connectionString,
+    connectionLimit: 20,
+    idleTimeout: 30000,
+    checkExpirationInterval: 10000,
+    acquireTimeout: 20000, // Increase timeout to prevent early failures
+  });
 
+  const adapter = new PrismaMariaDb(pool);
+  
+  globalForPrisma.pool = pool;
+  globalForPrisma.adapter = adapter;
+  globalForPrisma.prisma = new PrismaClient({ 
+    adapter,
+    log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
+  });
+}
 
-
-
-export const prisma =
-  globalForPrisma.prisma ||
-  new PrismaClient({ adapter })
-
-if (process.env.NODE_ENV !== 'production')
-  globalForPrisma.prisma = prisma
+// Export the singleton instance
+export const prisma = globalForPrisma.prisma!;
 
 export const useRemoteDb = process.env.USE_REMOTE_DB === "true";
 
@@ -36,8 +52,13 @@ export async function dbFetch<T>(exec: () => Promise<T>, fallback: T): Promise<T
     if (process.env.NODE_ENV === 'production' || useRemoteDb) {
       return await exec();
     }
-  } catch (error) {
-    console.error("Prisma DB fetch failed (expected during build if DB is unreachable):", error);
+  } catch (error: any) {
+    // Check if it's a connection pool timeout
+    if (error.message?.includes('pool timeout')) {
+      console.error("❌ Prisma Pool Timeout Detected. Ensure database is accessible and connection limit is sufficient.");
+    } else {
+      console.error("Prisma DB fetch failed:", error.message || error);
+    }
   }
   
   return fallback;
