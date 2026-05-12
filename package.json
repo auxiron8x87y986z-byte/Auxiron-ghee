@@ -9,10 +9,10 @@
     "lint": "eslint",
     "seed-admin": "node seed-admin.js",
     "set-admin-password": "node set-new-password.js",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "clean-deploy": "rm -rf .next node_modules package-lock.json && npm install && npm run build && pm2 restart ecosystem.config.js"
   },
   "dependencies": {
-    "@prisma/adapter-mariadb": "latest",
     "@prisma/client": "^7.8.0",
     "bcryptjs": "^3.0.3",
     "mariadb": "^3.5.2",

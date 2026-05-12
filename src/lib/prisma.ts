@@ -1,32 +1,39 @@
 import { PrismaClient } from '@prisma/client';
-import { PrismaMariaDb } from '@prisma/adapter-mariadb';
 
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
 };
 
-const connectionString = process.env["DATABASE_URL"] || 
-  `mysql://${process.env.DB_USER || 'root'}:${process.env.DB_PASSWORD || ''}@127.0.0.1:3306/${process.env.DB_NAME || 'auxiron_ghee'}`;
+// Use a more robust connection string logic
+const databaseUrl = process.env.DATABASE_URL || 
+  `mysql://${process.env.DB_USER || 'root'}:${process.env.DB_PASSWORD || ''}@${process.env.DB_HOST || '127.0.0.1'}:${process.env.DB_PORT || '3306'}/${process.env.DB_NAME || 'auxiron_ghee'}`;
 
-if (!globalForPrisma.prisma) {
-  const adapter = new PrismaMariaDb(connectionString);
-  globalForPrisma.prisma = new PrismaClient({ adapter });
-}
+export const prisma =
+  globalForPrisma.prisma ??
+  new PrismaClient({
+    datasources: {
+      db: {
+        url: databaseUrl,
+      },
+    },
+    log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
+  });
 
-export const prisma = globalForPrisma.prisma;
+if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
+
 export const useRemoteDb = process.env.USE_REMOTE_DB === "true";
 
 export async function dbFetch<T>(exec: () => Promise<T>, fallback: T): Promise<T> {
-  if (!useRemoteDb) {
-    return fallback;
+  // If we are in production or USE_REMOTE_DB is true, always try to fetch
+  if (process.env.NODE_ENV === 'production' || useRemoteDb) {
+    try {
+      return await exec();
+    } catch (error) {
+      console.error("Prisma DB fetch failed:", error);
+      return fallback;
+    }
   }
-
-  try {
-    return await exec();
-  } catch (error) {
-    console.error("Prisma DB fetch failed:", error);
-    return fallback;
-  }
+  
+  return fallback;
 }
 
-if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
