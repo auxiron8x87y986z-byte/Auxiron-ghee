@@ -1,14 +1,7 @@
 const { PrismaClient } = require('@prisma/client');
-const { PrismaMariaDb } = require('@prisma/adapter-mariadb');
-const mariadb = require('mariadb');
 const bcrypt = require('bcryptjs');
 
-const rawConnectionString = process.env.DATABASE_URL || 'mysql://root@localhost:3306/auxiron_ghee';
-const connectionString = rawConnectionString.replace('mysql://', 'mariadb://');
-const pool = mariadb.createPool(connectionString);
-const adapter = new PrismaMariaDb(pool);
-const prisma = new PrismaClient({ adapter });
-
+const prisma = new PrismaClient();
 
 async function main() {
   const existingAdmins = await prisma.$queryRaw`SELECT * FROM AdminUser LIMIT 1`;
@@ -41,6 +34,4 @@ main()
   .catch(e => { console.error(e); process.exit(1); })
   .finally(async () => { 
     await prisma.$disconnect(); 
-    await pool.end();
-    process.exit(0);
   });
