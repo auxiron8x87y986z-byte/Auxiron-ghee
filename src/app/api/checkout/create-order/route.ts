@@ -19,7 +19,7 @@ export async function POST(request: Request) {
 
     // 2. Create Order in Database (PENDING)
     const { getServerSession } = await import("next-auth");
-    const { authOptions } = await import("@/app/api/auth/[...nextauth]/route");
+    const { authOptions } = await import("@/lib/auth");
     const session = await getServerSession(authOptions);
     const userId = session?.user ? parseInt((session.user as any).id) : null;
 

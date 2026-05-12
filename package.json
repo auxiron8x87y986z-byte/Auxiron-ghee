@@ -13,6 +13,7 @@
     "clean-deploy": "rm -rf .next node_modules package-lock.json && npm install && npm run build && pm2 restart ecosystem.config.js"
   },
   "dependencies": {
+    "@prisma/adapter-mariadb": "^7.8.0",
     "@prisma/client": "^7.8.0",
     "bcryptjs": "^3.0.3",
     "mariadb": "^3.5.2",

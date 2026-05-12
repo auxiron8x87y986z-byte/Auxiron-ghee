@@ -1,10 +1,14 @@
 const { PrismaClient } = require('@prisma/client');
 const { PrismaMariaDb } = require('@prisma/adapter-mariadb');
+const mariadb = require('mariadb');
 const bcrypt = require('bcryptjs');
 
-const connectionString = process.env.DATABASE_URL || 'mysql://root@localhost:3306/auxiron_ghee';
-const adapter = new PrismaMariaDb(connectionString);
+const rawConnectionString = process.env.DATABASE_URL || 'mysql://root@localhost:3306/auxiron_ghee';
+const connectionString = rawConnectionString.replace('mysql://', 'mariadb://');
+const pool = mariadb.createPool(connectionString);
+const adapter = new PrismaMariaDb(pool);
 const prisma = new PrismaClient({ adapter });
+
 
 async function main() {
   const existingAdmins = await prisma.$queryRaw`SELECT * FROM AdminUser LIMIT 1`;
