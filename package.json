@@ -12,6 +12,7 @@
     "postinstall": "prisma generate"
   },
   "dependencies": {
+    "@prisma/adapter-mariadb": "latest",
     "@prisma/client": "^7.8.0",
     "bcryptjs": "^3.0.3",
     "mariadb": "^3.5.2",
