@@ -4,7 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { CartProvider } from "@/context/CartContext";
-import { prisma } from "@/lib/prisma";
+import { dbFetch, prisma } from "@/lib/prisma";
 import AuthProvider from "@/components/AuthProvider";
 import WhatsAppButton from "@/components/WhatsAppButton";
 
@@ -28,17 +28,17 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // Fetch site-wide general settings
-  const blocks = await prisma.contentBlock.findMany({
-    where: { key: { in: ["site_logo", "site_tagline"] } }
-  });
+  const blocks = await dbFetch(
+    () => prisma.$queryRaw`SELECT \`key\`, \`value\` FROM ContentBlock WHERE \`key\` IN ('site_logo', 'site_tagline')` as Promise<Array<{ key: string; value: string }>>,
+    [] as Array<{ key: string; value: string }>
+  );
 
   const logoUrl = blocks.find(b => b.key === "site_logo")?.value || "";
   const tagline = blocks.find(b => b.key === "site_tagline")?.value || "Identity of Purity. Premium Shuddh Deshi Bilona Ghee delivered directly to you in Jaipur & Jodhpur.";
 
   return (
     <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
-      <body>
+      <body suppressHydrationWarning>
         <AuthProvider>
           <CartProvider>
             <Navbar logoUrl={logoUrl} tagline={tagline} />

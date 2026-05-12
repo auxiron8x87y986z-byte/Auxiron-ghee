@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma";
+import { dbFetch, prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import Link from "next/link";
@@ -10,9 +10,12 @@ type Props = {
 // Dynamically generate SEO Metadata based on the database fields
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const resolvedParams = await params;
-  const post = await prisma.blogPost.findUnique({
-    where: { slug: resolvedParams.slug },
-  });
+  const post = await dbFetch(
+    () => prisma.blogPost.findUnique({
+      where: { slug: resolvedParams.slug },
+    }),
+    null
+  );
 
   if (!post || !post.published) {
     return {
@@ -31,9 +34,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function BlogPostPage({ params }: Props) {
   const resolvedParams = await params;
-  const post = await prisma.blogPost.findUnique({
-    where: { slug: resolvedParams.slug },
-  });
+  const post = await dbFetch(
+    () => prisma.blogPost.findUnique({
+      where: { slug: resolvedParams.slug },
+    }),
+    null
+  );
 
   if (!post || !post.published) {
     notFound();

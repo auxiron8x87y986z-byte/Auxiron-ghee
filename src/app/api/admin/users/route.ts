@@ -23,6 +23,11 @@ export async function POST(request: Request) {
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   try {
+    const currentUserId = parseInt((session.user as any).id);
+    if (currentUserId !== 1) {
+      return NextResponse.json({ error: "Only Super Admin can add new users" }, { status: 403 });
+    }
+
     const { name, email, password } = await request.json();
 
     if (!name || !email || !password) {

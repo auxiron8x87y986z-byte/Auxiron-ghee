@@ -1,35 +1,35 @@
 const { PrismaClient } = require('@prisma/client');
+const { PrismaMariaDb } = require('@prisma/adapter-mariadb');
 const bcrypt = require('bcryptjs');
 
-const prisma = new PrismaClient();
+const connectionString = process.env.DATABASE_URL || 'mysql://root@localhost:3306/auxiron_ghee';
+const adapter = new PrismaMariaDb(connectionString);
+const prisma = new PrismaClient({ adapter });
 
 async function main() {
-  const existingAdmin = await prisma.AdminUser.findFirst();
+  const existingAdmins = await prisma.$queryRaw`SELECT * FROM AdminUser LIMIT 1`;
+  const existingAdmin = existingAdmins[0];
+
   if (!existingAdmin) {
     const hashedPassword = await bcrypt.hash('Admin@123', 10);
-    await prisma.AdminUser.create({
-      data: {
-        name: 'Super Admin',
-        email: 'admin@auxiron.com',
-        password: hashedPassword,
-        updatedAt: new Date()
-      }
-    });
+    await prisma.$executeRaw`
+      INSERT INTO AdminUser (name, email, password, updatedAt) 
+      VALUES ('Super Admin', 'admin@auxiron.com', ${hashedPassword}, NOW())
+    `;
     console.log('Seeded default admin (admin@auxiron.com / Admin@123)');
   } else {
-    // Also upgrade the existing admin if the password isn't hashed
-    if (!existingAdmin.password.startsWith('$2a$') && !existingAdmin.password.startsWith('$2b$')) {
-       const hashedPassword = await bcrypt.hash('Admin@123', 10);
-       await prisma.AdminUser.update({
-         where: { id: existingAdmin.id },
-         data: { 
-           password: hashedPassword,
-           updatedAt: new Date()
-         }
-       });
-       console.log('Upgraded existing admin password to hash (Admin@123)');
+    const isCurrentPasswordAdmin123 = await bcrypt.compare('Admin@123', existingAdmin.password);
+    if (!isCurrentPasswordAdmin123) {
+      const hashedPassword = await bcrypt.hash('Admin@123', 10);
+      await prisma.$executeRaw`
+        UPDATE AdminUser 
+        SET password = ${hashedPassword}, updatedAt = NOW() 
+        WHERE id = ${existingAdmin.id}
+      `;
+      console.log('Updated existing admin password to Admin@123');
+    } else {
+      console.log('Admin already exists with Admin@123.');
     }
-    console.log('Admin already exists.');
   }
 }
 

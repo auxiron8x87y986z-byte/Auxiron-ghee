@@ -3,9 +3,11 @@
 import Link from 'next/link';
 import { useCart } from '@/context/CartContext';
 import { useState, useEffect } from 'react';
+import { useSession } from 'next-auth/react';
 
 export default function Navbar({ logoUrl, tagline }: { logoUrl?: string, tagline?: string }) {
   const { totalItems } = useCart();
+  const { data: session, status } = useSession();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -72,11 +74,22 @@ export default function Navbar({ logoUrl, tagline }: { logoUrl?: string, tagline
             <Link href="/contact">Contact</Link>
           </nav>
 
-          {/* Actions (Cart & Mobile Toggle) */}
+          {/* Actions (Cart & Account) */}
           <div className="nav-actions" style={{ display: 'flex', gap: '1rem', alignItems: 'center', zIndex: 51 }}>
             <Link href="/checkout" className="btn btn-outline" style={{ padding: '0.5rem 1rem' }}>
               🛒 Cart ({totalItems})
             </Link>
+            
+            {status === 'authenticated' ? (
+              <Link href={(session?.user as any)?.role === 'admin' ? '/admin' : '/account'} className="btn btn-outline" style={{ padding: '0.5rem 1rem' }}>
+                👤 Account
+              </Link>
+            ) : (
+              <Link href="/login" className="btn btn-outline" style={{ padding: '0.5rem 1rem' }}>
+                🔑 Login
+              </Link>
+            )}
+
             <button 
               className="mobile-menu-btn" 
               onClick={() => setIsMobileMenuOpen(true)}

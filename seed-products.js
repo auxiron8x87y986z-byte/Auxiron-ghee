@@ -1,5 +1,10 @@
 const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
+const { PrismaMariaDb } = require('@prisma/adapter-mariadb');
+const mariadb = require('mariadb');
+
+const connectionString = process.env.DATABASE_URL || 'mysql://root@localhost:3306/auxiron_ghee';
+const adapter = new PrismaMariaDb(connectionString);
+const prisma = new PrismaClient({ adapter });
 
 async function main() {
   const products = [

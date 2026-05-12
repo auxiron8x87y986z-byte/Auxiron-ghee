@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { prisma } from "@/lib/prisma";
+import { dbFetch, prisma } from "@/lib/prisma";
 
 export const metadata = {
   title: "Blog | Auxiron",
@@ -11,10 +11,13 @@ export const dynamic = "force-dynamic";
 
 export default async function BlogPage() {
   // Fetch only published blogs, ordered by newest first
-  const blogs = await prisma.blogPost.findMany({
-    where: { published: true },
-    orderBy: { createdAt: 'desc' }
-  });
+  const blogs = await dbFetch(
+    () => prisma.blogPost.findMany({
+      where: { published: true },
+      orderBy: { createdAt: 'desc' }
+    }),
+    []
+  );
 
   return (
     <div className="blog-page">

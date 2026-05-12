@@ -155,6 +155,23 @@ a:hover {
   display: none;
 }
 
+.show-on-mobile {
+  display: none !important;
+}
+
+.hide-on-mobile {
+  display: block !important;
+}
+
+@media (max-width: 768px) {
+  .show-on-mobile {
+    display: block !important;
+  }
+  .hide-on-mobile {
+    display: none !important;
+  }
+}
+
 /* -------------------------------------
    Mobile Responsive Overrides
 -------------------------------------- */

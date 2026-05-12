@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { signIn } from "next-auth/react";
+import { signIn, getSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
@@ -21,14 +21,15 @@ export default function LoginPage() {
       redirect: false,
       email,
       password,
+      loginType: "customer",
     });
 
     setLoading(false);
 
     if (res?.error) {
-      setError("Invalid email or password");
+      setError(res.error === "CredentialsSignin" ? "Invalid email or password" : res.error);
     } else {
-      router.push("/admin");
+      router.push("/account");
       router.refresh();
     }
   };
@@ -37,8 +38,8 @@ export default function LoginPage() {
     <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#FFFDF7" }}>
       <div style={{ maxWidth: "400px", width: "100%", padding: "2.5rem", backgroundColor: "#FFFFFF", borderRadius: "var(--radius-lg)", boxShadow: "var(--shadow-lg)" }}>
         <div style={{ textAlign: "center", marginBottom: "2rem" }}>
-          <h1 style={{ fontSize: "2rem", color: "var(--color-secondary-dark)", marginBottom: "0.5rem" }}>Admin Login</h1>
-          <p style={{ color: "var(--color-text-light)" }}>Sign in to manage Auxiron</p>
+          <h1 style={{ fontSize: "2rem", color: "var(--color-secondary-dark)", marginBottom: "0.5rem" }}>Customer Login</h1>
+          <p style={{ color: "var(--color-text-light)" }}>Welcome back! Please enter your details.</p>
         </div>
 
         {error && (
@@ -49,18 +50,18 @@ export default function LoginPage() {
 
         <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
           <div>
-            <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: 500, color: "var(--color-text)" }}>Email</label>
+            <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: 500, color: "var(--color-text)" }}>Email <span style={{ color: 'var(--color-error, red)' }}>*</span></label>
             <input
               type="email"
               required
               className="input"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="admin@auxiron.com"
+              placeholder="email address"
             />
           </div>
           <div>
-            <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: 500, color: "var(--color-text)" }}>Password</label>
+            <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: 500, color: "var(--color-text)" }}>Password <span style={{ color: 'var(--color-error, red)' }}>*</span></label>
             <input
               type="password"
               required
@@ -76,6 +77,17 @@ export default function LoginPage() {
         </form>
 
         <div style={{ textAlign: "center", marginTop: "2rem" }}>
+          <div style={{ marginBottom: "0.5rem" }}>
+            <Link href="/forgot-password" style={{ color: "var(--color-primary-dark)", fontSize: "0.9rem", fontWeight: 600, textDecoration: "none" }}>
+              Forgot Password?
+            </Link>
+          </div>
+          <div style={{ marginBottom: "1rem" }}>
+            <span style={{ color: "var(--color-text-light)", fontSize: "0.9rem" }}>Don't have an account? </span>
+            <Link href="/signup" style={{ color: "var(--color-primary-dark)", fontSize: "0.9rem", fontWeight: 600, textDecoration: "none" }}>
+              Sign Up
+            </Link>
+          </div>
           <Link href="/" style={{ color: "var(--color-text-light)", fontSize: "0.9rem", textDecoration: "underline" }}>
             ← Back to Store
           </Link>

@@ -42,7 +42,7 @@ export default function ContactForm() {
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
         <div>
-          <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>Name</label>
+          <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>Name <span style={{ color: 'var(--color-error, red)' }}>*</span></label>
           <input 
             type="text" 
             className="input" 
@@ -53,7 +53,7 @@ export default function ContactForm() {
           />
         </div>
         <div>
-          <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>Email</label>
+          <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>Email <span style={{ color: 'var(--color-error, red)' }}>*</span></label>
           <input 
             type="email" 
             className="input" 
@@ -66,7 +66,7 @@ export default function ContactForm() {
       </div>
       
       <div>
-        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>Subject</label>
+        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>Subject <span style={{ color: 'var(--color-error, red)' }}>*</span></label>
         <input 
           type="text" 
           className="input" 
@@ -78,7 +78,7 @@ export default function ContactForm() {
       </div>
 
       <div>
-        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>Message</label>
+        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>Message <span style={{ color: 'var(--color-error, red)' }}>*</span></label>
         <textarea 
           className="textarea" 
           rows={6} 

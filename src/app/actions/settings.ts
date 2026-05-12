@@ -1,9 +1,22 @@
 "use server";
 
-import { prisma } from "@/lib/prisma";
+import { prisma, useRemoteDb } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 
 export async function getContactSettings() {
+  if (!useRemoteDb) {
+    return {
+      success: true,
+      settings: {
+        id: 0,
+        contactEmail: "contact@auxiron.com",
+        whatsappNumber: "910000000000",
+        supportEmail: "support@auxiron.com",
+        location: "Jaipur & Jodhpur"
+      }
+    };
+  }
+
   try {
     let settings = await prisma.settings.findFirst();
     

@@ -193,7 +193,7 @@ export default function ProductClient({ variants }: { variants: Product[] }) {
                   const isSelected = selectedVariant.volume === variant.volume;
                   return (
                     <button
-                      key={variant.volume}
+                      key={variant.id}
                       onClick={() => setSelectedVariant(variant)}
                       style={{
                         padding: '0.8rem 1.5rem',

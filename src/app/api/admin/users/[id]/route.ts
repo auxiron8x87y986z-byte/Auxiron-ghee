@@ -9,8 +9,14 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   try {
+    const currentUserId = parseInt((session.user as any).id);
     const resolvedParams = await params;
     const id = parseInt(resolvedParams.id);
+    
+    if (currentUserId !== 1 && currentUserId !== id) {
+      return NextResponse.json({ error: "Only Super Admin can edit other users" }, { status: 403 });
+    }
+
     const { name, email, password } = await request.json();
 
     if (!name || !email) {
@@ -45,8 +51,17 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   try {
+    const currentUserId = parseInt((session.user as any).id);
     const resolvedParams = await params;
     const id = parseInt(resolvedParams.id);
+    
+    if (id === 1) {
+      return NextResponse.json({ error: "Super Admin cannot be deleted" }, { status: 403 });
+    }
+
+    if (currentUserId !== 1 && currentUserId !== id) {
+      return NextResponse.json({ error: "You are not authorized to delete this user" }, { status: 403 });
+    }
     
     await prisma.adminUser.delete({ where: { id } });
     return NextResponse.json({ success: true });

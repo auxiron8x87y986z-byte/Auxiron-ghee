@@ -18,6 +18,11 @@ export async function POST(request: Request) {
     }
 
     // 2. Create Order in Database (PENDING)
+    const { getServerSession } = await import("next-auth");
+    const { authOptions } = await import("@/app/api/auth/[...nextauth]/route");
+    const session = await getServerSession(authOptions);
+    const userId = session?.user ? parseInt((session.user as any).id) : null;
+
     const order = await prisma.order.create({
       data: {
         customerName: customerInfo.name,
@@ -28,7 +33,8 @@ export async function POST(request: Request) {
         totalAmount,
         paymentMethod,
         paymentStatus: "PENDING",
-        items: items,
+        items: JSON.stringify(items),
+        userId: userId && userId > 0 ? userId : null,
       }
     });
 

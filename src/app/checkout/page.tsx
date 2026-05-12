@@ -4,14 +4,30 @@ import { useCart } from "@/context/CartContext";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import Script from "next/script";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function CheckoutPage() {
+  const { data: session, status } = useSession();
+  const router = useRouter();
   const { items, totalItems, totalPrice, removeFromCart, updateQuantity, clearCart } = useCart();
   const [checkoutStep, setCheckoutStep] = useState(1);
   const [paymentMethod, setPaymentMethod] = useState("");
   const [availableGateways, setAvailableGateways] = useState<string[]>([]);
-  const [formData, setFormData] = useState({ name: '', phone: '', address: '', city: 'Jaipur' });
+  const [formData, setFormData] = useState({ name: session?.user?.name || '', phone: '', address: '', city: 'Jaipur' });
   const [processing, setProcessing] = useState(false);
+
+  useEffect(() => {
+    if (status === 'unauthenticated') {
+      router.push("/login?callbackUrl=/checkout");
+    }
+  }, [status, router]);
+
+  useEffect(() => {
+    if (session?.user?.name && !formData.name) {
+      setFormData(prev => ({ ...prev, name: session.user?.name || '' }));
+    }
+  }, [session, formData.name]);
 
   useEffect(() => {
     // Fetch enabled payment gateways
@@ -26,7 +42,19 @@ export default function CheckoutPage() {
       .catch(console.error);
   }, []);
 
-  const handleNext = () => setCheckoutStep(step => step + 1);
+  const handleNext = () => {
+    if (checkoutStep === 2) {
+      if (!formData.name || !formData.phone || !formData.address || !formData.city) {
+        alert("Please fill all mandatory fields: Full Name, Phone Number, Address, and City.");
+        return;
+      }
+      if (formData.phone.length < 10) {
+        alert("Please enter a valid 10-digit mobile number.");
+        return;
+      }
+    }
+    setCheckoutStep(step => step + 1);
+  };
 
   const handlePlaceOrder = async () => {
     if (!paymentMethod) {
@@ -135,6 +163,24 @@ export default function CheckoutPage() {
     );
   }
 
+  if (status === "loading") {
+    return (
+      <div className="container section" style={{ textAlign: 'center', minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <p>Checking authentication...</p>
+      </div>
+    );
+  }
+
+  if (status === "unauthenticated") {
+    return (
+      <div className="container section" style={{ textAlign: 'center', minHeight: '60vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+        <h2 style={{ marginBottom: '1.5rem' }}>Login Required</h2>
+        <p style={{ marginBottom: '2rem', color: 'var(--color-text-light)' }}>Please login to your account to complete your purchase.</p>
+        <Link href="/login?callbackUrl=/checkout" className="btn btn-primary">Login Now</Link>
+      </div>
+    );
+  }
+
   return (
     <div className="checkout-page" style={{ backgroundColor: '#FFFDF7', minHeight: '85vh', paddingBottom: '4rem' }}>
       <Script src="https://checkout.razorpay.com/v1/checkout.js" />
@@ -195,20 +241,20 @@ export default function CheckoutPage() {
                   <form style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
                       <div>
-                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>Full Name</label>
+                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>Full Name <span style={{ color: 'var(--color-error, red)' }}>*</span></label>
                         <input type="text" className="input" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} required />
                       </div>
                       <div>
-                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>Phone Number</label>
+                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>Phone Number <span style={{ color: 'var(--color-error, red)' }}>*</span></label>
                         <input type="tel" className="input" value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} required />
                       </div>
                     </div>
                     <div>
-                      <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>Full Address</label>
+                      <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>Full Address <span style={{ color: 'var(--color-error, red)' }}>*</span></label>
                       <textarea className="textarea" rows={3} value={formData.address} onChange={e => setFormData({...formData, address: e.target.value})} required></textarea>
                     </div>
                     <div>
-                      <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>City</label>
+                      <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>City <span style={{ color: 'var(--color-error, red)' }}>*</span></label>
                       <select className="input" value={formData.city} onChange={e => setFormData({...formData, city: e.target.value})}>
                         <option value="Jaipur">Jaipur</option>
                         <option value="Jodhpur">Jodhpur</option>
