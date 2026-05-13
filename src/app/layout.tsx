@@ -8,6 +8,8 @@ import { dbFetch, prisma } from "@/lib/prisma";
 import AuthProvider from "@/components/AuthProvider";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import { normalizeImageUrl } from "@/lib/image-utils";
+import { unstable_noStore as noStore } from "next/cache";
+import { headers } from "next/headers";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -32,6 +34,8 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  noStore();
+  headers();
   const blocks = await dbFetch(
     () => prisma.$queryRaw`SELECT \`key\`, \`value\` FROM contentblock WHERE \`key\` IN ('site_logo', 'site_tagline')` as Promise<Array<{ key: string; value: string }>>,
     [] as Array<{ key: string; value: string }>

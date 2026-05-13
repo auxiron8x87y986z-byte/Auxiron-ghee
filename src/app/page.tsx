@@ -5,11 +5,15 @@ import { getFAQs } from "@/app/actions/faq";
 import { getContactSettings } from "@/app/actions/settings";
 import FaqAccordion from "@/components/FaqAccordion";
 import { normalizeImageUrl } from "@/lib/image-utils";
+import { unstable_noStore as noStore } from "next/cache";
+import { headers } from "next/headers";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export default async function Home() {
+  noStore();
+  headers();
   const blocks = await dbFetch(
     () => prisma.$queryRaw`SELECT \`key\`, \`value\` FROM contentblock WHERE \`key\` IN ('hero_background', 'hero_background_mobile')` as Promise<Array<{ key: string; value: string }>>,
     [] as Array<{ key: string; value: string }>
