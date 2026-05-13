@@ -179,7 +179,7 @@ export default async function Home() {
       </section>
 
       {/* Feature Info Bar */}
-      <section style={{ backgroundColor: '#FFFDF7', borderBottom: '1px solid var(--color-border)' }}>
+      <section className="feature-info-bar" style={{ backgroundColor: '#FFFDF7', borderBottom: '1px solid var(--color-border)' }}>
         <div className="container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', padding: '2rem 0', gap: '2rem' }}>
           {[
             { icon: '🚚', title: 'Free Delivery', desc: 'Jaipur & Jodhpur' },
@@ -187,11 +187,11 @@ export default async function Home() {
             { icon: '⭐', title: 'Premium Quality', desc: 'Made with Bilona Method' },
             { icon: '📅', title: 'Fast Delivery', desc: 'Up to 4 Days' }
           ].map((feature, i) => (
-            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-              <div style={{ fontSize: '2rem' }}>{feature.icon}</div>
+            <div key={i} className="feature-item" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+              <div className="feature-icon" style={{ fontSize: '2rem' }}>{feature.icon}</div>
               <div>
-                <h4 style={{ color: 'var(--color-secondary-dark)', fontWeight: 600, fontSize: '0.95rem' }}>{feature.title}</h4>
-                <p style={{ color: 'var(--color-text-light)', fontSize: '0.85rem' }}>{feature.desc}</p>
+                <h4 className="feature-title" style={{ color: 'var(--color-secondary-dark)', fontWeight: 600, fontSize: '0.95rem' }}>{feature.title}</h4>
+                <p className="feature-desc" style={{ color: 'var(--color-text-light)', fontSize: '0.85rem' }}>{feature.desc}</p>
               </div>
             </div>
           ))}

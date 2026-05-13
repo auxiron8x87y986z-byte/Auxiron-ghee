@@ -44,15 +44,24 @@ export default function Navbar({ logoUrl, tagline }: { logoUrl?: string, tagline
             display: 'flex',
             alignItems: 'center'
           }}>
-            <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', textDecoration: 'none', color: 'inherit' }}>
+            {/* Brand/Logo */}
+            <Link href="/" className="logo-container" style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: '0.75rem', 
+              textDecoration: 'none',
+              height: '2.8rem' // Fixed height to align logo with text
+            }}>
               {logoUrl && (
                 /* eslint-disable-next-line @next/next/no-img-element */
-                <img src={logoUrl} alt="Auxiron Logo" style={{ maxHeight: '45px', width: 'auto', objectFit: 'contain' }} />
+                <img src={logoUrl} alt="Auxiron Logo" style={{ height: '100%', width: 'auto', objectFit: 'contain' }} />
               )}
-              <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                <span style={{ fontSize: '1.75rem', fontWeight: 700, lineHeight: 1 }}>Auxiron</span>
+              <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', height: '100%' }}>
+                <span style={{ fontSize: '1.75rem', fontFamily: 'var(--font-playfair)', fontWeight: 700, lineHeight: 1 }}>
+                  Auxiron
+                </span>
                 {tagline && (
-                  <span style={{ fontSize: '0.75rem', fontFamily: 'var(--font-inter)', color: 'var(--color-text-light)', fontWeight: 500, marginTop: '2px', letterSpacing: '0.5px' }}>
+                  <span style={{ fontSize: '0.75rem', color: 'var(--color-primary-dark)', fontWeight: 500, letterSpacing: '1px', textTransform: 'uppercase' }}>
                     {tagline}
                   </span>
                 )}
@@ -63,7 +72,7 @@ export default function Navbar({ logoUrl, tagline }: { logoUrl?: string, tagline
           {/* Desktop Navigation */}
           <nav className="desktop-nav" style={{
             display: 'flex',
-            gap: '2rem',
+            gap: '1.25rem',
             fontWeight: 500,
             color: 'var(--color-text)'
           }}>
@@ -76,17 +85,17 @@ export default function Navbar({ logoUrl, tagline }: { logoUrl?: string, tagline
 
           {/* Actions (Cart & Account) */}
           <div className="nav-actions" style={{ display: 'flex', gap: '1rem', alignItems: 'center', zIndex: 51 }}>
-            <Link href="/checkout" className="btn btn-outline" style={{ padding: '0.5rem 1rem' }}>
-              🛒 Cart ({totalItems})
+            <Link href="/checkout" className="btn btn-outline header-action-btn" style={{ padding: '0.5rem 1rem', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <span style={{ fontSize: '1.1rem' }}>🛒</span> Cart ({totalItems})
             </Link>
             
             {status === 'authenticated' ? (
-              <Link href={(session?.user as any)?.role === 'admin' ? '/admin' : '/account'} className="btn btn-outline" style={{ padding: '0.5rem 1rem' }}>
-                👤 Account
+              <Link href={(session?.user as any)?.role === 'admin' ? '/admin' : '/account'} className="btn btn-outline header-action-btn" style={{ padding: '0.5rem 1rem', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <span style={{ fontSize: '1.1rem' }}>👤</span> Account
               </Link>
             ) : (
-              <Link href="/login" className="btn btn-outline" style={{ padding: '0.5rem 1rem' }}>
-                🔑 Login
+              <Link href="/login" className="btn btn-primary header-action-btn" style={{ padding: '0.5rem 1rem', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <span style={{ fontSize: '1.1rem' }}>🔑</span> Login
               </Link>
             )}
 

@@ -121,7 +121,7 @@ a:hover {
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 1.5rem;
+  padding: 0 2.5rem; /* Increased from 1.5rem for better desktop margins */
 }
 
 .section {
@@ -291,6 +291,49 @@ a:hover {
 
   /* General Padding */
   .container {
-    padding: 0 16px !important;
+    padding: 0 1.25rem !important; /* Keep mobile margin tight but safe */
+  }
+
+  /* Task 3: Mobile Features Row (Single Row, small) */
+  .feature-info-bar .container {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto;
+    padding: 1rem 0.75rem !important;
+    gap: 0.75rem !important;
+    justify-content: flex-start !important;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .feature-info-bar .feature-item {
+    flex: 0 0 auto !important;
+    gap: 0.4rem !important;
+    background: #FFFFFF;
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-border);
+  }
+
+  .feature-info-bar .feature-icon {
+    font-size: 1.1rem !important;
+  }
+
+  .feature-info-bar .feature-title {
+    font-size: 0.7rem !important;
+    white-space: nowrap;
+  }
+
+  .feature-info-bar .feature-desc {
+    display: none !important; /* Hide description on mobile for single row */
   }
 }
+
+/* Task 2: Header buttons for 'Mobile Desktop' view */
+@media (min-width: 769px) and (max-width: 1100px) {
+  .header-action-btn {
+    padding: 0.4rem 0.75rem !important;
+    font-size: 0.85rem !important;
+  }
+}
+

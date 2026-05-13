@@ -32,7 +32,6 @@ export default function ReturnPage() {
             <p>If you have any questions about our Returns and Refunds Policy, please contact us:</p>
             <ul style={{ paddingLeft: '2rem' }}>
               <li>By email: support@auxiron.com</li>
-              <li>By WhatsApp: +91 00000 00000</li>
             </ul>
           </div>
         </div>
