@@ -251,12 +251,12 @@ a:hover {
   }
 
 
-  /* Hero Section Optimization */
+  /* Hero Section Optimization - Compact Spacing */
   .hero-section {
-    min-height: calc(100dvh - 70px) !important; /* Dynamic height minus header */
-    padding: 2rem 0 !important;
+    min-height: 550px !important; /* Fixed but compact minimum height */
+    padding: 1.5rem 0 !important;
     display: flex !important;
-    align-items: center !important; /* Centered content is better for mobile balance */
+    align-items: center !important; 
     justify-content: center !important;
   }
   
@@ -367,14 +367,20 @@ a:hover {
   }
 }
 
-/* Task 2: Header buttons for 'Mobile Desktop' view */
+/* Task 2: Header buttons & Hero for 'Mobile Desktop' view */
 @media (min-width: 769px) and (max-width: 1100px) {
   .header-action-btn {
     padding: 0.45rem 0.85rem !important;
     font-size: 0.85rem !important;
     height: 36px !important;
   }
+
+  .hero-section {
+    min-height: 500px !important; /* Compact hero for simulated desktop */
+    padding: 2rem 0 !important;
+  }
 }
+
 
 /* Ensure logo container doesn't squash */
 .logo-container {
