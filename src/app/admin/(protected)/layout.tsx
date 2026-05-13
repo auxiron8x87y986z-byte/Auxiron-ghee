@@ -1,5 +1,6 @@
 import Link from "next/link";
 import LogoutButton from "@/components/LogoutButton";
+import PM2RestartButton from "@/components/PM2RestartButton";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
@@ -77,6 +78,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
           <Link href="/" target="_blank" style={{ color: 'var(--color-primary-dark)', fontSize: '0.9rem', fontWeight: 500, display: 'block', marginBottom: '1rem' }}>
             ↗ View Live Site
           </Link>
+          <PM2RestartButton />
           <LogoutButton />
         </div>
       </aside>
