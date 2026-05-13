@@ -148,10 +148,10 @@ export default function GeneralSettingsForm({ initialLogo, initialTagline, initi
         }
 
         const formData = new FormData();
-        formData.append("site_logo", finalImageUrl);
+        formData.append("site_logo", finalImageUrl.replace(/^public\//, "/"));
         formData.append("site_tagline", tagline);
-        formData.append("hero_background", finalHeroBgUrl);
-        formData.append("hero_background_mobile", finalHeroBgMobileUrl);
+        formData.append("hero_background", finalHeroBgUrl.replace(/^public\//, "/"));
+        formData.append("hero_background_mobile", finalHeroBgMobileUrl.replace(/^public\//, "/"));
 
       await saveGeneralSettings(formData);
       setSuccessMsg(true);

@@ -104,6 +104,7 @@ export default function ProductClient({ variants }: { variants: Product[] }) {
                 fill 
                 style={{ objectFit: 'contain', padding: '2rem', zIndex: 1, filter: 'drop-shadow(0 20px 30px rgba(0,0,0,0.15))' }}
                 className="product-hero-image"
+                unoptimized
               />
             </div>
             
@@ -128,7 +129,7 @@ export default function ProductClient({ variants }: { variants: Product[] }) {
                       transition: 'border-color 0.2s'
                     }}
                   >
-                    <Image src={imgUrl} alt={`Thumbnail ${idx}`} fill style={{ objectFit: 'contain', padding: '0.5rem' }} />
+                    <Image src={imgUrl} alt={`Thumbnail ${idx}`} fill style={{ objectFit: 'contain', padding: '0.5rem' }} unoptimized />
                   </button>
                 ))}
               </div>

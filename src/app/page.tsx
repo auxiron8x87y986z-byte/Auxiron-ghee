@@ -43,22 +43,36 @@ export default async function Home() {
         background: '#1A1A1A'
       }}>
         {/* Background Image - Desktop */}
-        <Image 
+        <img 
           src={heroBg} 
           alt="Premium Auxiron Ghee Background" 
-          fill 
           className="hero-bg-image hide-on-mobile"
-          style={{ objectFit: 'cover', objectPosition: 'center right', zIndex: 0 }}
-          priority
+          style={{ 
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover', 
+            objectPosition: 'center right', 
+            zIndex: 0 
+          }}
         />
         {/* Background Image - Mobile */}
-        <Image 
+        <img 
           src={heroBgMobile} 
           alt="Premium Auxiron Ghee Background Mobile" 
-          fill 
           className="hero-bg-image show-on-mobile"
-          style={{ objectFit: 'cover', objectPosition: 'center', zIndex: 0 }}
-          priority
+          style={{ 
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover', 
+            objectPosition: 'center', 
+            zIndex: 0 
+          }}
         />
         {/* Gradient Overlay (Dark on Left, Transparent on Right) */}
         <div className="hero-overlay" style={{

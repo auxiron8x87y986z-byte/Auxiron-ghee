@@ -34,14 +34,39 @@ export async function POST(request: Request) {
     const buffer = Buffer.from(bytes);
 
     // Generate unique filename
-    const ext = file.name.split('.').pop();
+    const ext = file.name.split('.').pop()?.toLowerCase();
     const uniqueName = `${Date.now()}-${Math.round(Math.random() * 1e9)}.${ext}`;
     
     // Save to public/uploads
     const uploadDir = path.join(process.cwd(), "public", "uploads");
+    
+    // Ensure directory exists
+    try {
+      const { mkdir } = await import("fs/promises");
+      await mkdir(uploadDir, { recursive: true });
+    } catch (err) {
+      console.error("Failed to create upload directory:", err);
+    }
+
     const filePath = path.join(uploadDir, uniqueName);
     
     await writeFile(filePath, buffer);
+    
+    // Create a symlink in the root for Nginx compatibility (Linux only)
+    if (process.platform !== "win32") {
+      try {
+        const { symlink, lstat } = await import("fs/promises");
+        const rootUploads = path.join(process.cwd(), "uploads");
+        try {
+          await lstat(rootUploads);
+        } catch (e) {
+          // Only create if it doesn't exist
+          await symlink("public/uploads", rootUploads, "dir");
+        }
+      } catch (err) {
+        // Silently fail if symlink creation is not possible
+      }
+    }
     
     const fileUrl = `/uploads/${uniqueName}`;
 
