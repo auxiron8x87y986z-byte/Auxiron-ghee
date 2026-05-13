@@ -57,11 +57,11 @@ export default function Navbar({ logoUrl, tagline }: { logoUrl?: string, tagline
                 <img src={logoUrl} alt="Auxiron Logo" style={{ height: '100%', width: 'auto', objectFit: 'contain' }} />
               )}
               <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', height: '100%' }}>
-                <span style={{ fontSize: '1.75rem', fontFamily: 'var(--font-playfair)', fontWeight: 700, lineHeight: 1 }}>
+                <span style={{ fontSize: 'clamp(1.4rem, 4vw, 1.75rem)', fontFamily: 'var(--font-playfair)', fontWeight: 700, lineHeight: 1 }}>
                   Auxiron
                 </span>
                 {tagline && (
-                  <span style={{ fontSize: '0.75rem', color: 'var(--color-primary-dark)', fontWeight: 500, letterSpacing: '1px', textTransform: 'uppercase' }}>
+                  <span style={{ fontSize: 'clamp(0.6rem, 1.8vw, 0.75rem)', color: 'var(--color-primary-dark)', fontWeight: 500, letterSpacing: '0.5px', textTransform: 'uppercase' }}>
                     {tagline}
                   </span>
                 )}
@@ -84,7 +84,7 @@ export default function Navbar({ logoUrl, tagline }: { logoUrl?: string, tagline
           </nav>
 
           {/* Actions (Cart & Account) */}
-          <div className="nav-actions" style={{ display: 'flex', gap: '1rem', alignItems: 'center', zIndex: 51 }}>
+          <div className="nav-actions" style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', zIndex: 51 }}>
             <Link href="/checkout" className="btn btn-outline header-action-btn" style={{ padding: '0.5rem 1rem', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
               <span style={{ fontSize: '1.1rem' }}>🛒</span> Cart ({totalItems})
             </Link>

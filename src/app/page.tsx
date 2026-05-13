@@ -97,17 +97,17 @@ export default async function Home() {
         }} />
 
         {/* Content Container */}
-        <div className="container hero-content-container" style={{ position: 'relative', zIndex: 2, display: 'flex', width: '100%' }}>
-          <div style={{ flex: '0 1 650px' }}>
+        <div className="container hero-content-container" style={{ position: 'relative', zIndex: 2, display: 'flex', width: '100%', height: '100%' }}>
+          <div className="hero-text-wrapper" style={{ flex: '0 1 650px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
             {/* Top Line */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
+            <div className="hero-top-line" style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
               <span style={{ 
                 color: 'var(--color-primary)', 
                 fontWeight: 500, 
                 fontSize: '1.1rem',
                 letterSpacing: '0.5px'
               }}>Pure by Tradition. Trusted for Generations.</span>
-              <div style={{ height: '1px', width: '50px', backgroundColor: 'var(--color-primary)' }}></div>
+              <div className="hide-on-mobile" style={{ height: '1px', width: '50px', backgroundColor: 'var(--color-primary)' }}></div>
             </div>
             
             {/* Main Heading */}
