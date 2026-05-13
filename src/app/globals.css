@@ -252,10 +252,10 @@ a:hover {
 
 
 
-  /* Hero Section Optimization - Compact Spacing */
+  /* Hero Section Optimization - Content Hugging */
   .hero-section {
-    min-height: 550px !important; /* Fixed but compact minimum height */
-    padding: 1.5rem 0 !important;
+    min-height: auto !important; 
+    padding: 3rem 0 !important; /* Balanced vertical margins */
     display: flex !important;
     align-items: center !important; 
     justify-content: center !important;
@@ -385,10 +385,10 @@ a:hover {
     height: 42px !important;
   }
 
-  /* Hero Section System */
+  /* Hero Section System - Content Hugging */
   .hero-section {
-    min-height: 550px !important;
-    padding: 4rem 0 !important;
+    min-height: auto !important; /* Wrap content */
+    padding: 5rem 0 !important; /* Gentle vertical margins */
     align-items: center !important;
   }
 
