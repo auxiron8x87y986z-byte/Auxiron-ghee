@@ -367,19 +367,71 @@ a:hover {
   }
 }
 
-/* Task 2: Header buttons & Hero for 'Mobile Desktop' view */
+/* ============================================================
+   MOBILE DESKTOP SYSTEM (769px - 1100px)
+   Targeting Tablet Landscape & Simulated Desktop Views
+   ============================================================ */
 @media (min-width: 769px) and (max-width: 1100px) {
+  /* Header Adjustments */
   .header-action-btn {
     padding: 0.45rem 0.85rem !important;
     font-size: 0.85rem !important;
     height: 36px !important;
   }
 
+  /* Hero Section System */
   .hero-section {
-    min-height: 500px !important; /* Compact hero for simulated desktop */
-    padding: 2rem 0 !important;
+    min-height: 520px !important;
+    padding: 3rem 0 !important;
+    align-items: center !important;
+  }
+
+  .hero-content-container {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+
+  .hero-text-wrapper {
+    flex: 0 1 500px !important; /* Narrower container for better composition */
+  }
+
+  .hero-title {
+    font-size: 3.2rem !important;
+    line-height: 1.1 !important;
+    text-align: left !important;
+    margin-bottom: 1rem !important;
+  }
+
+  .hero-desc {
+    font-size: 1.05rem !important;
+    line-height: 1.6 !important;
+    text-align: left !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    max-width: 450px !important;
+    margin-bottom: 2rem !important;
+  }
+
+  .hero-feature-icons {
+    justify-content: flex-start !important;
+    gap: 1rem !important;
+    margin-bottom: 2.5rem !important;
+  }
+
+  .hero-buttons {
+    flex-direction: row !important;
+    justify-content: flex-start !important;
+    gap: 1rem !important;
+  }
+
+  .hero-buttons .btn {
+    width: auto !important;
+    min-width: 160px !important;
+    padding: 0.8rem 1.5rem !important;
+    font-size: 1rem !important;
   }
 }
+
 
 
 /* Ensure logo container doesn't squash */
