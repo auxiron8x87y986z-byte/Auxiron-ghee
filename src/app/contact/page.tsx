@@ -1,6 +1,9 @@
 import { getContactSettings } from "@/app/actions/settings";
 import ContactForm from "@/components/ContactForm";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export const metadata = {
   title: "Contact Us | Auxiron",
   description: "Get in touch with Auxiron for any queries regarding our pure Bilona Ghee.",

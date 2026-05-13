@@ -8,6 +8,9 @@ import { dbFetch, prisma } from "@/lib/prisma";
 import AuthProvider from "@/components/AuthProvider";
 import WhatsAppButton from "@/components/WhatsAppButton";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],

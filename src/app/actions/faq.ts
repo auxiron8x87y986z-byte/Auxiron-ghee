@@ -38,6 +38,7 @@ export async function createFAQ(data: { question: string; answer: string; order?
 
     revalidatePath("/admin/faq");
     revalidatePath("/faq");
+    revalidatePath("/");
     return { success: true, faq };
   } catch (error: any) {
     console.error("Failed to create FAQ:", error);
@@ -62,6 +63,7 @@ export async function updateFAQ(id: number, data: { question: string; answer: st
 
     revalidatePath("/admin/faq");
     revalidatePath("/faq");
+    revalidatePath("/");
     return { success: true, faq };
   } catch (error: any) {
     console.error("Failed to update FAQ:", error);
@@ -77,6 +79,7 @@ export async function deleteFAQ(id: number) {
 
     revalidatePath("/admin/faq");
     revalidatePath("/faq");
+    revalidatePath("/");
     return { success: true };
   } catch (error: any) {
     console.error("Failed to delete FAQ:", error);
@@ -98,6 +101,7 @@ export async function reorderFAQs(orderedIds: number[]) {
 
     revalidatePath("/admin/faq");
     revalidatePath("/faq");
+    revalidatePath("/");
     return { success: true };
   } catch (error: any) {
     console.error("Failed to reorder FAQs:", error);

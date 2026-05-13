@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { revalidatePath } from "next/cache";
 
 export async function PUT(request: Request, { params }: { params: Promise<{ id: string, testimonialId: string }> }) {
   try {
@@ -25,6 +26,7 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
       WHERE id = ${testimonialId}
     `;
 
+    revalidatePath("/", "layout");
     return NextResponse.json({ success: true });
   } catch (error) {
     return NextResponse.json({ error: "Failed to update" }, { status: 500 });
@@ -42,6 +44,7 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
     const testimonialId = parseInt(resolvedParams.testimonialId);
     await prisma.$executeRaw`DELETE FROM testimonial WHERE id = ${testimonialId}`;
 
+    revalidatePath("/", "layout");
     return NextResponse.json({ success: true });
   } catch (error) {
     return NextResponse.json({ error: "Failed to delete" }, { status: 500 });
