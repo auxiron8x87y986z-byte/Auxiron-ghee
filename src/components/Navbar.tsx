@@ -86,16 +86,20 @@ export default function Navbar({ logoUrl, tagline }: { logoUrl?: string, tagline
           {/* Actions (Cart & Account) */}
           <div className="nav-actions" style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', zIndex: 51 }}>
             <Link href="/checkout" className="btn btn-outline header-action-btn" style={{ padding: '0.5rem 1rem', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <span style={{ fontSize: '1.1rem' }}>🛒</span> Cart ({totalItems})
+              <span style={{ fontSize: '1.1rem' }}>🛒</span> 
+              <span className="hide-on-mobile">Cart ({totalItems})</span>
+              <span className="show-on-mobile" style={{ fontSize: '0.8rem', fontWeight: 600 }}>({totalItems})</span>
             </Link>
             
             {status === 'authenticated' ? (
               <Link href={(session?.user as any)?.role === 'admin' ? '/admin' : '/account'} className="btn btn-outline header-action-btn" style={{ padding: '0.5rem 1rem', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <span style={{ fontSize: '1.1rem' }}>👤</span> Account
+                <span style={{ fontSize: '1.1rem' }}>👤</span> 
+                <span className="hide-on-mobile">Account</span>
               </Link>
             ) : (
               <Link href="/login" className="btn btn-primary header-action-btn" style={{ padding: '0.5rem 1rem', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <span style={{ fontSize: '1.1rem' }}>🔑</span> Login
+                <span style={{ fontSize: '1.1rem' }}>👤</span> 
+                <span className="hide-on-mobile">Login</span>
               </Link>
             )}
 
