@@ -7,6 +7,7 @@ import { CartProvider } from "@/context/CartContext";
 import { dbFetch, prisma } from "@/lib/prisma";
 import AuthProvider from "@/components/AuthProvider";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import { normalizeImageUrl } from "@/lib/image-utils";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -36,7 +37,7 @@ export default async function RootLayout({
     [] as Array<{ key: string; value: string }>
   );
 
-  const logoUrl = blocks.find(b => b.key === "site_logo")?.value || "";
+  const logoUrl = normalizeImageUrl(blocks.find(b => b.key === "site_logo")?.value || "");
   const tagline = blocks.find(b => b.key === "site_tagline")?.value || "Identity of Purity. Premium Shuddh Deshi Bilona Ghee delivered directly to you in Jaipur & Jodhpur.";
 
   return (

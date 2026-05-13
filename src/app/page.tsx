@@ -262,7 +262,7 @@ export default async function Home() {
                 <div style={{ display: 'flex', flexDirection: section.imageUrl ? 'row' : 'column', gap: '3rem', alignItems: 'center' }}>
                   {section.imageUrl && (
                     <div style={{ flex: 1 }}>
-                      <img src={section.imageUrl} alt={section.title} style={{ width: '100%', borderRadius: '12px', boxShadow: 'var(--shadow-lg)' }} />
+                      <img src={normalizeImageUrl(section.imageUrl)} alt={section.title} style={{ width: '100%', borderRadius: '12px', boxShadow: 'var(--shadow-lg)' }} />
                     </div>
                   )}
                   {section.content && (

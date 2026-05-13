@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { dbFetch, prisma } from "@/lib/prisma";
+import { normalizeImageUrl } from "@/lib/image-utils";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -66,7 +67,7 @@ export default async function AboutPage() {
 
           {heroImage && (
             <div style={{ width: '100%', height: '400px', borderRadius: 'var(--radius-lg)', overflow: 'hidden', marginBottom: '5rem', boxShadow: 'var(--shadow-md)' }}>
-              <img src={heroImage} alt={heading} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <img src={normalizeImageUrl(heroImage)} alt={heading} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             </div>
           )}
 
@@ -74,7 +75,7 @@ export default async function AboutPage() {
             <div style={{ flex: '1 1 400px', order: 2 }}>
               <div style={{ position: 'relative', width: '100%', height: '400px', borderRadius: 'var(--radius-lg)', overflow: 'hidden', boxShadow: 'var(--shadow-lg)' }}>
                 {farmImage ? (
-                  <img src={farmImage} alt="Farm Tradition" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  <img src={normalizeImageUrl(farmImage)} alt="Farm Tradition" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 ) : (
                   <div style={{ width: '100%', height: '100%', backgroundColor: 'var(--color-border)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <span style={{ color: 'var(--color-text-light)' }}>[Farm/Tradition Image]</span>
@@ -94,7 +95,7 @@ export default async function AboutPage() {
             <div style={{ flex: '1 1 400px' }}>
               <div style={{ position: 'relative', width: '100%', height: '400px', borderRadius: 'var(--radius-lg)', overflow: 'hidden', boxShadow: 'var(--shadow-lg)' }}>
                 {purityImage ? (
-                  <img src={purityImage} alt="Purity" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  <img src={normalizeImageUrl(purityImage)} alt="Purity" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 ) : (
                   <div style={{ width: '100%', height: '100%', backgroundColor: 'var(--color-border)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <span style={{ color: 'var(--color-text-light)' }}>[Purity Image]</span>
@@ -123,7 +124,7 @@ export default async function AboutPage() {
                 <div style={{ flex: '1 1 400px', order: isEven ? 2 : 1 }}>
                   <div style={{ position: 'relative', width: '100%', height: '400px', borderRadius: 'var(--radius-lg)', overflow: 'hidden', boxShadow: 'var(--shadow-lg)' }}>
                     {sec.imageUrl ? (
-                      <img src={sec.imageUrl} alt={sec.heading} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      <img src={normalizeImageUrl(sec.imageUrl)} alt={sec.heading} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                     ) : (
                       <div style={{ width: '100%', height: '100%', backgroundColor: 'var(--color-border)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                         <span style={{ color: 'var(--color-text-light)' }}>[Section Image]</span>

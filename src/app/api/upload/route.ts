@@ -40,8 +40,8 @@ export async function POST(request: Request) {
     // Use a clean prefix to avoid issues with special characters in original filenames
     const uniqueName = `upload-${timestamp}-${random}.${ext}`;
     
-    // Save to public/uploads
-    const uploadDir = path.join(process.cwd(), "public", "uploads");
+    // Save to public/images/uploads (using /images/ path which is confirmed working)
+    const uploadDir = path.join(process.cwd(), "public", "images", "uploads");
     
     // Ensure directory exists with correct permissions
     try {
@@ -55,29 +55,7 @@ export async function POST(request: Request) {
     
     await writeFile(filePath, buffer);
     
-    // Create a symlink in the root for Nginx compatibility (Linux only)
-    if (process.platform !== "win32") {
-      try {
-        const { symlink, lstat, unlink } = await import("fs/promises");
-        const rootUploads = path.join(process.cwd(), "uploads");
-        let exists = false;
-        let isSymlink = false;
-        try {
-          const stats = await lstat(rootUploads);
-          exists = true;
-          isSymlink = stats.isSymbolicLink();
-        } catch (e) {}
-
-        if (exists && !isSymlink) {
-           // It's a real directory, don't touch it to be safe
-        } else {
-           if (isSymlink) await unlink(rootUploads).catch(() => {});
-           await symlink("public/uploads", rootUploads, "dir").catch(() => {});
-        }
-      } catch (err) {}
-    }
-    
-    const fileUrl = `/uploads/${uniqueName}`;
+    const fileUrl = `/images/uploads/${uniqueName}`;
 
     return NextResponse.json({ success: true, url: fileUrl });
   } catch (error) {
