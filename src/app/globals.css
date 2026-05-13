@@ -240,15 +240,16 @@ a:hover {
 
   /* Compact Mobile Header Buttons */
   .header-action-btn {
-    padding: 0.35rem 0.65rem !important;
-    font-size: 0.8rem !important;
-    gap: 0.25rem !important;
-    height: 32px !important;
+    padding: 0.4rem 0.8rem !important;
+    font-size: 0.9rem !important; /* Slightly larger for better mobile desktop scaling */
+    gap: 0.3rem !important;
+    height: 36px !important;
   }
 
   .header-action-btn span {
-    font-size: 0.9rem !important;
+    font-size: 1rem !important;
   }
+
 
 
   /* Hero Section Optimization - Compact Spacing */
@@ -369,68 +370,66 @@ a:hover {
 
 /* ============================================================
    MOBILE DESKTOP SYSTEM (769px - 1100px)
-   Targeting Tablet Landscape & Simulated Desktop Views
+   Enhanced scaling to prevent 'microscopic' UI on mobile browsers
    ============================================================ */
 @media (min-width: 769px) and (max-width: 1100px) {
+  /* Scale up base slightly for better mobile desktop readability */
+  :root {
+    font-size: 17px; 
+  }
+
   /* Header Adjustments */
   .header-action-btn {
-    padding: 0.45rem 0.85rem !important;
-    font-size: 0.85rem !important;
-    height: 36px !important;
+    padding: 0.6rem 1rem !important;
+    font-size: 1rem !important;
+    height: 42px !important;
   }
 
   /* Hero Section System */
   .hero-section {
-    min-height: 520px !important;
-    padding: 3rem 0 !important;
+    min-height: 550px !important;
+    padding: 4rem 0 !important;
     align-items: center !important;
   }
 
-  .hero-content-container {
-    margin-top: 0 !important;
-    padding-top: 0 !important;
-  }
-
   .hero-text-wrapper {
-    flex: 0 1 500px !important; /* Narrower container for better composition */
+    flex: 0 1 550px !important;
   }
 
   .hero-title {
-    font-size: 3.2rem !important;
+    font-size: clamp(3.2rem, 8vw, 4rem) !important; /* Larger minimum */
     line-height: 1.1 !important;
     text-align: left !important;
-    margin-bottom: 1rem !important;
+    margin-bottom: 1.2rem !important;
   }
 
   .hero-desc {
-    font-size: 1.05rem !important;
-    line-height: 1.6 !important;
+    font-size: 1.15rem !important; /* Increased for mobile desktop */
+    line-height: 1.7 !important;
     text-align: left !important;
     margin-left: 0 !important;
     margin-right: 0 !important;
-    max-width: 450px !important;
-    margin-bottom: 2rem !important;
+    max-width: 500px !important;
+    margin-bottom: 2.5rem !important;
   }
 
   .hero-feature-icons {
     justify-content: flex-start !important;
-    gap: 1rem !important;
-    margin-bottom: 2.5rem !important;
+    gap: 1.2rem !important;
+    margin-bottom: 3rem !important;
   }
 
-  .hero-buttons {
-    flex-direction: row !important;
-    justify-content: flex-start !important;
-    gap: 1rem !important;
+  .hero-feature-icons > div {
+    padding: 0.5rem 1rem !important;
   }
 
   .hero-buttons .btn {
-    width: auto !important;
-    min-width: 160px !important;
-    padding: 0.8rem 1.5rem !important;
-    font-size: 1rem !important;
+    min-width: 180px !important;
+    padding: 1rem 2rem !important;
+    font-size: 1.1rem !important;
   }
 }
+
 
 
 

@@ -57,11 +57,11 @@ export default function Navbar({ logoUrl, tagline }: { logoUrl?: string, tagline
                 <img src={logoUrl} alt="Auxiron Logo" style={{ height: '100%', width: 'auto', objectFit: 'contain' }} />
               )}
               <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', height: '100%' }}>
-                <span style={{ fontSize: 'clamp(1.4rem, 4vw, 1.75rem)', fontFamily: 'var(--font-playfair)', fontWeight: 700, lineHeight: 1 }}>
+                <span style={{ fontSize: 'clamp(1.55rem, 4vw, 1.8rem)', fontFamily: 'var(--font-playfair)', fontWeight: 700, lineHeight: 1 }}>
                   Auxiron
                 </span>
                 {tagline && (
-                  <span style={{ fontSize: 'clamp(0.6rem, 1.8vw, 0.75rem)', color: 'var(--color-primary-dark)', fontWeight: 500, letterSpacing: '0.5px', textTransform: 'uppercase' }}>
+                  <span style={{ fontSize: 'clamp(0.7rem, 1.8vw, 0.8rem)', color: 'var(--color-primary-dark)', fontWeight: 500, letterSpacing: '0.5px', textTransform: 'uppercase' }}>
                     {tagline}
                   </span>
                 )}
