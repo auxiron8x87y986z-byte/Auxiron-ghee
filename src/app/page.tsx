@@ -15,12 +15,13 @@ export const fetchCache = 'force-no-store';
 export default async function Home() {
   noStore();
   headers();
-  const blocks = await dbFetch(
-    () => prisma.$queryRaw`SELECT \`key\`, \`value\` FROM contentblock WHERE \`key\` IN ('hero_background', 'hero_background_mobile')` as Promise<Array<{ key: string; value: string }>>,
-    [] as Array<{ key: string; value: string }>
+  const siteSettings = await dbFetch(
+    () => prisma.siteSettings.findFirst(),
+    null
   );
-  const heroBg = normalizeImageUrl(blocks.find(b => b.key === "hero_background")?.value || "/images/auxiron_hero_premium.png");
-  const heroBgMobile = normalizeImageUrl(blocks.find(b => b.key === "hero_background_mobile")?.value || heroBg);
+
+  const heroBg = normalizeImageUrl(siteSettings?.heroBgUrl || "/images/auxiron_hero_premium.png");
+  const heroBgMobile = normalizeImageUrl(siteSettings?.heroBgMobileUrl || heroBg);
   
   const { faqs } = await getFAQs();
   const { settings } = await getContactSettings();

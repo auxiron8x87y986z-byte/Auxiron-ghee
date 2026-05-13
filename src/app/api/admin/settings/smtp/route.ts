@@ -16,27 +16,29 @@ export async function POST(request: Request) {
     // We use $queryRaw because the table might not be in the Prisma schema yet
     // or we can use $executeRaw
     
-    const existing = await prisma.$queryRaw`SELECT id FROM smtpsettings LIMIT 1` as any[];
+    const existing = await prisma.sMTPSettings.findFirst();
     
-    if (existing.length > 0) {
-      await prisma.$executeRaw`
-        UPDATE smtpsettings 
-        SET smtpHost = ${smtpHost}, 
-            smtpPort = ${smtpPort}, 
-            smtpUsername = ${smtpUsername}, 
-            smtpPassword = ${smtpPassword}, 
-            smtpEncryption = ${smtpEncryption}, 
-            senderEmail = ${senderEmail}, 
-            senderName = ${senderName},
-            otpSubject = ${otpSubject},
-            otpTemplate = ${otpTemplate}
-        WHERE id = ${existing[0].id}
-      `;
+    const settingsData = {
+      smtpHost,
+      smtpPort,
+      smtpUsername,
+      smtpPassword,
+      smtpEncryption,
+      senderEmail,
+      senderName,
+      otpSubject,
+      otpTemplate
+    };
+
+    if (existing) {
+      await prisma.sMTPSettings.update({
+        where: { id: existing.id },
+        data: settingsData
+      });
     } else {
-      await prisma.$executeRaw`
-        INSERT INTO smtpsettings (smtpHost, smtpPort, smtpUsername, smtpPassword, smtpEncryption, senderEmail, senderName, otpSubject, otpTemplate)
-        VALUES (${smtpHost}, ${smtpPort}, ${smtpUsername}, ${smtpPassword}, ${smtpEncryption}, ${senderEmail}, ${senderName}, ${otpSubject}, ${otpTemplate})
-      `;
+      await prisma.sMTPSettings.create({
+        data: settingsData
+      });
     }
 
     return NextResponse.json({ success: true });

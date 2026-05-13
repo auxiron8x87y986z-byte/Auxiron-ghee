@@ -15,16 +15,17 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
     const testimonialId = parseInt(resolvedParams.testimonialId);
     const { name, location, review, rating, displayOrder, isActive } = await request.json();
 
-    await prisma.$executeRaw`
-      UPDATE testimonial 
-      SET name = ${name}, 
-          location = ${location}, 
-          review = ${review}, 
-          rating = ${rating}, 
-          displayOrder = ${displayOrder}, 
-          isActive = ${isActive}
-      WHERE id = ${testimonialId}
-    `;
+    await prisma.testimonial.update({
+      where: { id: testimonialId },
+      data: {
+        name,
+        location,
+        review,
+        rating,
+        displayOrder,
+        isActive
+      }
+    });
 
     revalidatePath("/", "layout");
     return NextResponse.json({ success: true });
@@ -33,7 +34,7 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
   }
 }
 
-export async function DELETE(request: Request, { params }: { params: Promise<{ id: string, testimonialId: string }> }) {
+export async function DELETE(request: Request, { params }: { params: Promise<{ id: string; testimonialId: string }> }) {
   try {
     const session = await getServerSession(authOptions);
     if (!session || (session.user as any).role !== "admin") {
@@ -42,7 +43,9 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
 
     const resolvedParams = await params;
     const testimonialId = parseInt(resolvedParams.testimonialId);
-    await prisma.$executeRaw`DELETE FROM testimonial WHERE id = ${testimonialId}`;
+    await prisma.testimonial.delete({
+      where: { id: testimonialId }
+    });
 
     revalidatePath("/", "layout");
     return NextResponse.json({ success: true });

@@ -25,7 +25,17 @@ export async function POST(request: Request) {
     const otpExpiry = new Date(Date.now() + 15 * 60 * 1000); // 15 mins
 
     // Update user with OTP
-    await prisma.$executeRawUnsafe(`UPDATE ${table} SET otp = ?, otp_expiry = ? WHERE id = ?`, otp, otpExpiry, user.id);
+    if (table === "user") {
+      await prisma.user.update({
+        where: { id: user.id },
+        data: { otp, otp_expiry: otpExpiry }
+      });
+    } else {
+      await prisma.adminUser.update({
+        where: { id: user.id },
+        data: { otp, otp_expiry: otpExpiry }
+      });
+    }
 
     // Fetch Template from DB
     const smtpRes = await prisma.$queryRaw`SELECT otpSubject, otpTemplate FROM smtpsettings LIMIT 1` as any[];

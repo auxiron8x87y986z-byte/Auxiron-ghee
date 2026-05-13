@@ -15,15 +15,16 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
     const featureId = parseInt(resolvedParams.featureId);
     const { title, icon, description, displayOrder, isActive } = await request.json();
 
-    await prisma.$executeRaw`
-      UPDATE homefeature 
-      SET title = ${title}, 
-          icon = ${icon}, 
-          description = ${description}, 
-          displayOrder = ${displayOrder}, 
-          isActive = ${isActive}
-      WHERE id = ${featureId}
-    `;
+    await prisma.homeFeature.update({
+      where: { id: featureId },
+      data: {
+        title,
+        icon,
+        description,
+        displayOrder,
+        isActive
+      }
+    });
 
     revalidatePath("/", "layout");
     return NextResponse.json({ success: true });
@@ -32,7 +33,7 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
   }
 }
 
-export async function DELETE(request: Request, { params }: { params: Promise<{ id: string, featureId: string }> }) {
+export async function DELETE(request: Request, { params }: { params: Promise<{ id: string; featureId: string }> }) {
   try {
     const session = await getServerSession(authOptions);
     if (!session || (session.user as any).role !== "admin") {
@@ -41,7 +42,9 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
 
     const resolvedParams = await params;
     const featureId = parseInt(resolvedParams.featureId);
-    await prisma.$executeRaw`DELETE FROM homefeature WHERE id = ${featureId}`;
+    await prisma.homeFeature.delete({
+      where: { id: featureId }
+    });
 
     revalidatePath("/", "layout");
     return NextResponse.json({ success: true });

@@ -27,13 +27,25 @@ export async function POST(request: Request) {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    await prisma.$executeRawUnsafe(`
-      UPDATE ${table} 
-      SET password = ?, 
-          otp = NULL, 
-          otp_expiry = NULL 
-      WHERE id = ?
-    `, hashedPassword, user[0].id);
+    if (table === "user") {
+      await prisma.user.update({
+        where: { id: user[0].id },
+        data: {
+          password: hashedPassword,
+          otp: null,
+          otp_expiry: null
+        }
+      });
+    } else {
+      await prisma.adminUser.update({
+        where: { id: user[0].id },
+        data: {
+          password: hashedPassword,
+          otp: null,
+          otp_expiry: null
+        }
+      });
+    }
 
     return NextResponse.json({ success: true });
   } catch (error) {

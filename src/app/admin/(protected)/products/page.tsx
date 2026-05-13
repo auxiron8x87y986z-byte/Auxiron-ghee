@@ -2,10 +2,16 @@ import { dbFetch, prisma } from "@/lib/prisma";
 import ProductManager from "./ProductManager";
 
 export default async function AdminProducts() {
-  const products = await dbFetch(
-    () => prisma.Product.findMany({ orderBy: { volume: 'asc' } }),
+  const productsRaw = await dbFetch(
+    () => prisma.product.findMany({ orderBy: { volume: 'asc' } }),
     []
   );
 
-  return <ProductManager initialProducts={products} />;
+  // Safely parse images field for each product
+  const products = productsRaw.map(p => ({
+    ...p,
+    images: typeof p.images === 'string' ? JSON.parse(p.images) : p.images || []
+  }));
+
+  return <ProductManager initialProducts={products as any} />;
 }

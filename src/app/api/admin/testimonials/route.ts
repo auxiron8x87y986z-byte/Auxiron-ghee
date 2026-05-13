@@ -13,10 +13,16 @@ export async function POST(request: Request) {
 
     const { name, location, review, rating, displayOrder, isActive } = await request.json();
 
-    await prisma.$executeRaw`
-      INSERT INTO testimonial (name, location, review, rating, displayOrder, isActive)
-      VALUES (${name}, ${location}, ${review}, ${rating}, ${displayOrder}, ${isActive})
-    `;
+    await prisma.testimonial.create({
+      data: {
+        name,
+        location,
+        review,
+        rating,
+        displayOrder,
+        isActive
+      }
+    });
 
     revalidatePath("/", "layout");
     return NextResponse.json({ success: true });

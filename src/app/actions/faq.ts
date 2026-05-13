@@ -4,10 +4,6 @@ import { prisma, useRemoteDb } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 
 export async function getFAQs() {
-  if (!useRemoteDb) {
-    return { success: true, faqs: [] };
-  }
-
   try {
     const faqs = await prisma.faq.findMany({
       orderBy: { order: "asc" },

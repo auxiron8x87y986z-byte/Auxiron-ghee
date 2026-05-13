@@ -15,10 +15,17 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
     const sectionId = parseInt(resolvedParams.id);
     const { name, location, review, rating, displayOrder, isActive } = await request.json();
 
-    await prisma.$executeRaw`
-      INSERT INTO testimonial (sectionId, name, location, review, rating, displayOrder, isActive)
-      VALUES (${sectionId}, ${name}, ${location}, ${review}, ${rating}, ${displayOrder}, ${isActive})
-    `;
+    await prisma.testimonial.create({
+      data: {
+        sectionId: sectionId,
+        name,
+        location,
+        review,
+        rating,
+        displayOrder,
+        isActive
+      }
+    });
 
     revalidatePath("/", "layout");
     return NextResponse.json({ success: true });

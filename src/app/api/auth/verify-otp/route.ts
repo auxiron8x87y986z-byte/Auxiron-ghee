@@ -30,9 +30,14 @@ export async function POST(request: Request) {
 
     // If it's a regular user, mark as verified
     if (!isAdmin && !dbUser.isVerified) {
-      await prisma.$executeRaw`
-        UPDATE user SET isVerified = 1, otp = NULL, otp_expiry = NULL WHERE id = ${dbUser.id}
-      `;
+      await prisma.user.update({
+        where: { id: dbUser.id },
+        data: {
+          isVerified: true,
+          otp: null,
+          otp_expiry: null
+        }
+      });
     } 
     // Note: We don't clear the OTP here for Admins or verified Users 
     // because this route is used as a preliminary check in the forgot-password flow.

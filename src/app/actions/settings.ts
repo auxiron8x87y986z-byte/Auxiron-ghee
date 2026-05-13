@@ -4,35 +4,30 @@ import { prisma, useRemoteDb } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 
 export async function getContactSettings() {
-  if (!useRemoteDb) {
-    return {
-      success: true,
-      settings: {
-        id: 0,
-        contactEmail: "contact@auxiron.com",
-        whatsappNumber: "910000000000",
-        supportEmail: "support@auxiron.com",
-        location: "Jaipur & Jodhpur"
-      }
-    };
-  }
-
   try {
-    let settings = await prisma.settings.findFirst();
+    let settings = await prisma.siteSettings.findFirst();
     
     // Create default if none exists
     if (!settings) {
-      settings = await prisma.settings.create({
+      settings = await prisma.siteSettings.create({
         data: {
           contactEmail: "contact@auxiron.com",
           whatsappNumber: "910000000000",
-          supportEmail: "support@auxiron.com",
-          location: "Jaipur & Jodhpur",
+          officeAddress: "Jaipur & Jodhpur",
         }
       });
     }
 
-    return { success: true, settings };
+    return { 
+      success: true, 
+      settings: {
+        id: settings.id,
+        contactEmail: settings.contactEmail || "contact@auxiron.com",
+        whatsappNumber: settings.whatsappNumber || "910000000000",
+        supportEmail: settings.contactEmail || "contact@auxiron.com", // Fallback
+        location: settings.officeAddress || "Jaipur & Jodhpur"
+      }
+    };
   } catch (error: any) {
     console.error("Failed to fetch settings:", error);
     return { success: false, error: "Failed to load settings" };
@@ -46,24 +41,27 @@ export async function updateContactSettings(data: {
   location: string;
 }) {
   try {
-    if (!data.contactEmail || !data.whatsappNumber) {
-      return { success: false, error: "Contact Email and WhatsApp Number are required" };
-    }
+    const existing = await prisma.siteSettings.findFirst();
 
-    const settings = await prisma.settings.findFirst();
-
-    if (settings) {
-      await prisma.settings.update({
-        where: { id: settings.id },
-        data,
+    if (existing) {
+      await prisma.siteSettings.update({
+        where: { id: existing.id },
+        data: {
+          contactEmail: data.contactEmail,
+          whatsappNumber: data.whatsappNumber,
+          officeAddress: data.location,
+        },
       });
     } else {
-      await prisma.settings.create({
-        data,
+      await prisma.siteSettings.create({
+        data: {
+          contactEmail: data.contactEmail,
+          whatsappNumber: data.whatsappNumber,
+          officeAddress: data.location,
+        },
       });
     }
 
-    // Revalidate paths that use these settings
     revalidatePath("/contact");
     revalidatePath("/");
     revalidatePath("/admin/settings/contact");

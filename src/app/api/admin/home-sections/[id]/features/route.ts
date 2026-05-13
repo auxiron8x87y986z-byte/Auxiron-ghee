@@ -15,10 +15,16 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
     const sectionId = parseInt(resolvedParams.id);
     const { title, icon, description, displayOrder, isActive } = await request.json();
 
-    await prisma.$executeRaw`
-      INSERT INTO homefeature (sectionId, title, icon, description, displayOrder, isActive)
-      VALUES (${sectionId}, ${title}, ${icon}, ${description}, ${displayOrder}, ${isActive})
-    `;
+    await prisma.homeFeature.create({
+      data: {
+        sectionId: sectionId,
+        title,
+        icon,
+        description,
+        displayOrder,
+        isActive
+      }
+    });
 
     revalidatePath("/", "layout");
     return NextResponse.json({ success: true });

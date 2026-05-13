@@ -37,13 +37,13 @@ export default async function RootLayout({
 }>) {
   noStore();
   headers();
-  const blocks = await dbFetch(
-    () => prisma.$queryRaw`SELECT \`key\`, \`value\` FROM contentblock WHERE \`key\` IN ('site_logo', 'site_tagline')` as Promise<Array<{ key: string; value: string }>>,
-    [] as Array<{ key: string; value: string }>
+  const settings = await dbFetch(
+    () => prisma.siteSettings.findFirst(),
+    null
   );
 
-  const logoUrl = normalizeImageUrl(blocks.find(b => b.key === "site_logo")?.value || "");
-  const tagline = blocks.find(b => b.key === "site_tagline")?.value || "Identity of Purity. Premium Shuddh Deshi Bilona Ghee delivered directly to you in Jaipur & Jodhpur.";
+  const logoUrl = normalizeImageUrl(settings?.logoUrl || "");
+  const tagline = settings?.siteTagline || "Identity of Purity. Premium Shuddh Deshi Bilona Ghee delivered directly to you in Jaipur & Jodhpur.";
 
   return (
     <html lang="en" className={`${inter.variable} ${playfair.variable}`}>

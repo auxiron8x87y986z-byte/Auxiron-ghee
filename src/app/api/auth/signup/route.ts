@@ -30,17 +30,27 @@ export async function POST(request: Request) {
 
     if (existingUser.length > 0) {
       // Update existing unverified user
-      await prisma.$executeRaw`
-        UPDATE user 
-        SET name = ${name}, password = ${hashedPassword}, otp = ${otp}, otp_expiry = ${otpExpiry} 
-        WHERE id = ${existingUser[0].id}
-      `;
+      await prisma.user.update({
+        where: { id: existingUser[0].id },
+        data: {
+          name,
+          password: hashedPassword,
+          otp,
+          otp_expiry: otpExpiry
+        }
+      });
     } else {
       // Create new unverified user
-      await prisma.$executeRaw`
-        INSERT INTO user (name, email, password, isVerified, otp, otp_expiry) 
-        VALUES (${name}, ${email}, ${hashedPassword}, 0, ${otp}, ${otpExpiry})
-      `;
+      await prisma.user.create({
+        data: {
+          name,
+          email,
+          password: hashedPassword,
+          isVerified: false,
+          otp,
+          otp_expiry: otpExpiry
+        }
+      });
     }
 
     // Fetch SMTP Settings for Signup OTP

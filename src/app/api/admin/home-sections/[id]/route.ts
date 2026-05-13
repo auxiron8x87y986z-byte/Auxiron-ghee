@@ -15,17 +15,18 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
     const id = parseInt(resolvedParams.id);
     const { title, subtitle, content, imageUrl, sectionType, displayOrder, isActive } = await request.json();
 
-    await prisma.$executeRaw`
-      UPDATE homesection 
-      SET title = ${title}, 
-          subtitle = ${subtitle}, 
-          content = ${content}, 
-          imageUrl = ${imageUrl}, 
-          sectionType = ${sectionType}, 
-          displayOrder = ${displayOrder}, 
-          isActive = ${isActive}
-      WHERE id = ${id}
-    `;
+    await prisma.homeSection.update({
+      where: { id },
+      data: {
+        title,
+        subtitle,
+        content,
+        imageUrl,
+        sectionType,
+        displayOrder,
+        isActive
+      }
+    });
 
     revalidatePath("/", "layout");
     return NextResponse.json({ success: true });
@@ -43,15 +44,13 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
 
     const resolvedParams = await params;
     const id = parseInt(resolvedParams.id);
-
-    // 1. Delete linked features
-    await prisma.$executeRaw`DELETE FROM homefeature WHERE sectionId = ${id}`;
     
-    // 2. Delete linked testimonials
-    await prisma.$executeRaw`DELETE FROM testimonial WHERE sectionId = ${id}`;
-
-    // 3. Delete the section
-    await prisma.$executeRaw`DELETE FROM homesection WHERE id = ${id}`;
+    // We use a transaction to delete everything related
+    await prisma.$transaction([
+      prisma.homeFeature.deleteMany({ where: { sectionId: id } }),
+      prisma.testimonial.deleteMany({ where: { sectionId: id } }),
+      prisma.homeSection.delete({ where: { id } })
+    ]);
 
     revalidatePath("/", "layout");
     return NextResponse.json({ success: true });
