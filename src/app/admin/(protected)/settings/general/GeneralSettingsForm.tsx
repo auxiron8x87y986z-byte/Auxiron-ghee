@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { saveGeneralSettings } from "./actions";
+import { normalizeImageUrl } from "@/lib/image-utils";
 
 export default function GeneralSettingsForm({ initialLogo, initialTagline, initialHeroBg, initialHeroBgMobile }: { initialLogo: string, initialTagline: string, initialHeroBg: string, initialHeroBgMobile: string }) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -148,10 +149,10 @@ export default function GeneralSettingsForm({ initialLogo, initialTagline, initi
         }
 
         const formData = new FormData();
-        formData.append("site_logo", finalImageUrl.replace(/^public\//, "/"));
+        formData.append("site_logo", normalizeImageUrl(finalImageUrl));
         formData.append("site_tagline", tagline);
-        formData.append("hero_background", finalHeroBgUrl.replace(/^public\//, "/"));
-        formData.append("hero_background_mobile", finalHeroBgMobileUrl.replace(/^public\//, "/"));
+        formData.append("hero_background", normalizeImageUrl(finalHeroBgUrl));
+        formData.append("hero_background_mobile", normalizeImageUrl(finalHeroBgMobileUrl));
 
       await saveGeneralSettings(formData);
       setSuccessMsg(true);

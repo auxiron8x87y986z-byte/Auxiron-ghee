@@ -42,5 +42,6 @@ export async function saveGeneralSettings(formData: FormData) {
   }
 
   revalidatePath("/", "layout");
+  revalidatePath("/");
   return { success: true };
 }

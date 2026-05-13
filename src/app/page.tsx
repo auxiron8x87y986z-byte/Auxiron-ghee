@@ -4,6 +4,7 @@ import { dbFetch, prisma } from "@/lib/prisma";
 import { getFAQs } from "@/app/actions/faq";
 import { getContactSettings } from "@/app/actions/settings";
 import FaqAccordion from "@/components/FaqAccordion";
+import { normalizeImageUrl } from "@/lib/image-utils";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -13,8 +14,8 @@ export default async function Home() {
     () => prisma.$queryRaw`SELECT \`key\`, \`value\` FROM contentblock WHERE \`key\` IN ('hero_background', 'hero_background_mobile')` as Promise<Array<{ key: string; value: string }>>,
     [] as Array<{ key: string; value: string }>
   );
-  const heroBg = blocks.find(b => b.key === "hero_background")?.value || "/images/auxiron_hero_premium.png";
-  const heroBgMobile = blocks.find(b => b.key === "hero_background_mobile")?.value || heroBg;
+  const heroBg = normalizeImageUrl(blocks.find(b => b.key === "hero_background")?.value || "/images/auxiron_hero_premium.png");
+  const heroBgMobile = normalizeImageUrl(blocks.find(b => b.key === "hero_background_mobile")?.value || heroBg);
   
   const { faqs } = await getFAQs();
   const { settings } = await getContactSettings();

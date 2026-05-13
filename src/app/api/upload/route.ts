@@ -34,16 +34,19 @@ export async function POST(request: Request) {
     const buffer = Buffer.from(bytes);
 
     // Generate unique filename
-    const ext = file.name.split('.').pop()?.toLowerCase();
-    const uniqueName = `${Date.now()}-${Math.round(Math.random() * 1e9)}.${ext}`;
+    const ext = file.name.split('.').pop()?.toLowerCase() || 'png';
+    const timestamp = Date.now();
+    const random = Math.round(Math.random() * 1e6);
+    // Use a clean prefix to avoid issues with special characters in original filenames
+    const uniqueName = `upload-${timestamp}-${random}.${ext}`;
     
     // Save to public/uploads
     const uploadDir = path.join(process.cwd(), "public", "uploads");
     
-    // Ensure directory exists
+    // Ensure directory exists with correct permissions
     try {
       const { mkdir } = await import("fs/promises");
-      await mkdir(uploadDir, { recursive: true });
+      await mkdir(uploadDir, { recursive: true, mode: 0o755 });
     } catch (err) {
       console.error("Failed to create upload directory:", err);
     }
@@ -55,17 +58,23 @@ export async function POST(request: Request) {
     // Create a symlink in the root for Nginx compatibility (Linux only)
     if (process.platform !== "win32") {
       try {
-        const { symlink, lstat } = await import("fs/promises");
+        const { symlink, lstat, unlink } = await import("fs/promises");
         const rootUploads = path.join(process.cwd(), "uploads");
+        let exists = false;
+        let isSymlink = false;
         try {
-          await lstat(rootUploads);
-        } catch (e) {
-          // Only create if it doesn't exist
-          await symlink("public/uploads", rootUploads, "dir");
+          const stats = await lstat(rootUploads);
+          exists = true;
+          isSymlink = stats.isSymbolicLink();
+        } catch (e) {}
+
+        if (exists && !isSymlink) {
+           // It's a real directory, don't touch it to be safe
+        } else {
+           if (isSymlink) await unlink(rootUploads).catch(() => {});
+           await symlink("public/uploads", rootUploads, "dir").catch(() => {});
         }
-      } catch (err) {
-        // Silently fail if symlink creation is not possible
-      }
+      } catch (err) {}
     }
     
     const fileUrl = `/uploads/${uniqueName}`;
