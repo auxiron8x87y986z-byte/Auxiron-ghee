@@ -84,24 +84,25 @@ export default function Navbar({ logoUrl, tagline }: { logoUrl?: string, tagline
           </nav>
 
           {/* Actions (Cart & Account) */}
-          <div className="nav-actions" style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', zIndex: 51 }}>
-            <Link href="/checkout" className="btn btn-outline header-action-btn" style={{ padding: '0.5rem 1rem', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <span style={{ fontSize: '1.1rem' }}>🛒</span> 
-              <span className="hide-on-mobile">Cart ({totalItems})</span>
-              <span className="show-on-mobile" style={{ fontSize: '0.8rem', fontWeight: 600 }}>({totalItems})</span>
-            </Link>
-            
-            {status === 'authenticated' ? (
-              <Link href={(session?.user as any)?.role === 'admin' ? '/admin' : '/account'} className="btn btn-outline header-action-btn" style={{ padding: '0.5rem 1rem', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <span style={{ fontSize: '1.1rem' }}>👤</span> 
-                <span className="hide-on-mobile">Account</span>
+          <div className="nav-actions" style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', zIndex: 51 }}>
+            <div className="hide-on-mobile" style={{ display: 'flex', flexDirection: 'row', flexWrap: 'nowrap', gap: '0.75rem', alignItems: 'center' }}>
+              <Link href="/checkout" className="btn btn-outline header-action-btn" style={{ padding: '0.5rem 1rem', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <span style={{ fontSize: '1.1rem' }}>🛒</span> 
+                <span>Cart ({totalItems})</span>
               </Link>
-            ) : (
-              <Link href="/login" className="btn btn-primary header-action-btn" style={{ padding: '0.5rem 1rem', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <span style={{ fontSize: '1.1rem' }}>👤</span> 
-                <span className="hide-on-mobile">Login</span>
-              </Link>
-            )}
+              
+              {status === 'authenticated' ? (
+                <Link href={(session?.user as any)?.role === 'admin' ? '/admin' : '/account'} className="btn btn-outline header-action-btn" style={{ padding: '0.5rem 1rem', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <span style={{ fontSize: '1.1rem' }}>👤</span> 
+                  <span>Account</span>
+                </Link>
+              ) : (
+                <Link href="/login" className="btn btn-primary header-action-btn" style={{ padding: '0.5rem 1rem', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <span style={{ fontSize: '1.1rem' }}>👤</span> 
+                  <span>Login</span>
+                </Link>
+              )}
+            </div>
 
             <button 
               className="mobile-menu-btn" 
@@ -135,6 +136,22 @@ export default function Navbar({ logoUrl, tagline }: { logoUrl?: string, tagline
             <Link href="/product" onClick={() => setIsMobileMenuOpen(false)}>Product</Link>
             <Link href="/blog" onClick={() => setIsMobileMenuOpen(false)}>Blog</Link>
             <Link href="/contact" onClick={() => setIsMobileMenuOpen(false)}>Contact</Link>
+            
+            <div style={{ margin: '1rem 0', height: '1px', backgroundColor: 'var(--color-border)' }}></div>
+            
+            <Link href="/checkout" onClick={() => setIsMobileMenuOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+              <span>🛒</span> Shopping Cart ({totalItems})
+            </Link>
+            
+            {status === 'authenticated' ? (
+              <Link href={(session?.user as any)?.role === 'admin' ? '/admin' : '/account'} onClick={() => setIsMobileMenuOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                <span>👤</span> My Account
+              </Link>
+            ) : (
+              <Link href="/login" onClick={() => setIsMobileMenuOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                <span>👤</span> Login / Register
+              </Link>
+            )}
           </nav>
         </div>
       )}
